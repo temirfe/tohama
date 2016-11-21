@@ -40,8 +40,8 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'About us', 'url' => ['/page/1']],
-        ['label' => 'Explore UAE', 'url' => ['/site/about']],
-        ['label' => 'Destinations', 'url' => ['/site/about']],
+        ['label' => 'Explore UAE', 'url' => ['/#']],
+        ['label' => 'Destinations', 'url' => ['/#']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
@@ -64,9 +64,9 @@ AppAsset::register($this);
     ?>
 
     <div class="container">
-        <?php/*= Breadcrumbs::widget([
+        <?php /*= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) */?>
+        ]) */ ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
