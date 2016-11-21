@@ -55,6 +55,36 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
+
+        'assetManager' => [
+            'appendTimestamp' => true,
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'js' => ['jquery.min.js']
+                ],
+                /*
+                'yii\web\YiiAsset' => [
+                    'sourcePath' => null,
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    'js' => ['js/yii.min.js']
+                ],
+                */
+                'yii\bootstrap\BootstrapAsset' => [
+                    'sourcePath' => null,
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    'css' => ['css/bootstrap.min.css'],
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'sourcePath' => null,
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    'js' => ['js/bootstrap.min.js'],
+                ],
+            ],
+        ],
+
     ],
     'params' => $params,
 ];
