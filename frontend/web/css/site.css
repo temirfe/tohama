@@ -117,7 +117,7 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
-.mynavbar{background-color: #fff; z-index: 2;border-radius: 0;}
+.mynavbar{background-color: #fff; z-index: 2;border-radius: 0; margin-bottom: 0;}
 
 a.navbar-brand {
     padding: 0;margin-left: 0 !important;
@@ -130,12 +130,9 @@ div.navbar-header{}
     color:#000;
     transition: color 0.2s ease;
 }
-.slider{ left: 0;
-    position: absolute;
-    top: 0;
+.slider{
     width: 100%;}
 .slider img{width:100%;}
-.slider_mask{height:340px;}
 .navbar-nav > li.active a {
     color:#f8a411;
 }
@@ -186,4 +183,68 @@ a.no_underline, a.no_underline:hover{
 }
 .photo_thumb img {
     transition: all 0.2s linear 0s;
+}
+.admpanel_top {
+    box-shadow: 0 0 9px gold;
+    width: 100%;
+}
+.admpanel-title {
+    background: #000 none repeat scroll 0 0;
+    color: #ad8d38;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 8px;
+}
+.admpanel-title-wrapper {
+    margin: 0 auto;
+    width: 995px;
+}
+.openclose {
+    background: #3b3b3b none repeat scroll 0 0;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: normal;
+    margin-left: 4px;
+    padding: 1px 3px;
+}
+.admpanel-content {
+    background: #3b3b3b none repeat scroll 0 0;
+    font-size: 0.9em;
+    overflow: hidden;
+    padding: 5px 0 7px;
+}
+.top_admpanel_wrapper {
+    margin: 0 auto;
+    width: 994px;
+}
+.operations {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.operations div {
+    color: #f9f9f9;
+    float: left;
+    margin-right: 10px;
+    min-width: 129px;
+    padding-left: 10px;
+}
+.operations a {
+    color: white;
+    display: inline-block;
+    font-weight: bold;
+    padding: 2px 0;
+    font-size: 12px;
+    text-decoration: none;
+}
+.operations a:hover {
+    color: #ad8d38;
+}
+.panel-icon {
+    color: #ad8d38;
+    font-size: 12px;
+    padding-right: 7px;
+}
+.clear {
+    clear: both;
 }

@@ -13,10 +13,6 @@ $this->title = 'Tohama Travel & Tourism';
         width: 163px;
     }
 </style>
-<div class="slider">
-    <?=Html::img("images/bg_sunset.jpg")?>
-</div>
-<div class="slider_mask"></div>
 <div class="site-index">
 
     <div class="body-content">

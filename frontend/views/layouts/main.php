@@ -14,6 +14,14 @@ AppAsset::register($this);
 $controller=Yii::$app->controller->id;
 $action=Yii::$app->controller->action->id;
 
+if(!isset($user)) $user=Yii::$app->user;
+if(!isset($isGuest)) $isGuest=$user->isGuest;
+if(!isset($identity)) $identity=$user->identity;
+if(!isset($user_id) && $identity) $user_id=$identity->id; else $user_id='';
+if(!isset($user_name) && $identity) $user_name=$identity->username; else $user_name='';
+if(!isset($user_role) && $identity) $user_role=$identity->role; else $user_role='';
+if(!isset($dao)) $dao=Yii::$app->db;
+
 if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $about_active=true; else $about_active=false;
 ?>
 <?php $this->beginPage() ?>
@@ -33,6 +41,11 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
 <?php $this->beginBody() ?>
 
 <div class="wrap">
+    <?php
+    if(!$isGuest && $user_role=='Administrator'){include_once('_adminpanel.php');}
+    //elseif(!$isGuest && $user_role=='Moderator'){include_once('_moderpanel.php');}
+    //elseif(!$isGuest && $user_role=='ContentManager'){include_once('_cmanagerpanel.php');}
+    ?>
     <?php
 
     NavBar::begin([
@@ -66,6 +79,11 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
         'items' => $menuItems,
     ]);
     NavBar::end();
+    ?>
+    <?php
+        if($controller=="site" && $action=="index"){
+            echo "<div class='slider'>".Html::img("images/bg_sunset.jpg")."</div>";
+        }
     ?>
 
     <div class="container">
