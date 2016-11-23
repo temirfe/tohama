@@ -60,7 +60,7 @@ class ContactForm extends Model
             ->setTo($email)
             ->setFrom(['info@tohamatravel.com' => 'Tohama mailer'])
             ->setSubject('User has sent message via contact form')
-            ->setTextBody('Name: '.$this->name.'.<br /> Subject: '.$this->subject.'<br /> E-mail: '.$this->email.'<br /> Message: '.$this->body)
+            ->setTextBody('Name: '.$this->name.'. Subject: '.$this->subject.' E-mail: '.$this->email.' Message: '.$this->body)
             ->send();
     }
 }
