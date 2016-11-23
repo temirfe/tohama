@@ -5,9 +5,10 @@ RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/(admin)
 RewriteRule ^.*$ backend/web/index.php [L]
 
-RewriteCond %{REQUEST_URI} ^/(assets|css|photoswipe|swiper|images|files|useruploads|sitemap|yandex)
+RewriteCond %{REQUEST_URI} ^/(assets|css|fonts|photoswipe|swiper|images|files|useruploads|sitemap|yandex)
 RewriteRule ^assets/(.*)$ frontend/web/assets/$1 [L]
 RewriteRule ^css/(.*)$ frontend/web/css/$1 [L]
+RewriteRule ^fonts/(.*)$ frontend/web/fonts/$1 [L]
 RewriteRule ^photoswipe/(.*)$ frontend/web/photoswipe/$1 [L]
 RewriteRule ^swiper/(.*)$ frontend/web/swiper/$1 [L]
 RewriteRule ^images/(.*)$ frontend/web/images/$1 [L]
@@ -15,7 +16,7 @@ RewriteRule ^files/(.*)$ frontend/web/files/$1 [L]
 RewriteRule ^js/(.*)$ frontend/web/js/$1 [L]
 RewriteRule ^sitemap.xml$ frontend/web/sitemap.xml [L]
 
-RewriteCond %{REQUEST_URI} !^/(frontend|backend)/web/(assets|css|photoswipe|swiper|images|files|js|useruploads)/
+RewriteCond %{REQUEST_URI} !^/(frontend|backend)/web/(assets|css|fonts|photoswipe|swiper|images|files|js|useruploads)/
 RewriteCond %{REQUEST_FILENAME} !-f [OR]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^.*$ frontend/web/index.php

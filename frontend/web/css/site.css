@@ -110,6 +110,9 @@ a.desc:after {
 .nav > li > form > button.logout:hover {
     text-decoration: none;
 }
+.rel{
+    position: relative;}
+.abs{position:absolute;}
 
 .nav > li > form > button.logout:focus {
     outline: none;
@@ -144,4 +147,43 @@ div.navbar-header{}
     background: #fff url("/images/logo_text_black.png") no-repeat scroll center center / 163px auto;
     height: 50px;
     width: 163px;
+}
+.img_title{
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+.img_title span{
+    background-color: #000;
+    color: #e0ba5b;
+    display: block;
+    font-family: roboto,sans-serif;
+    margin-right: 15px;
+    opacity: 0.8;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.img_thumb_box{margin-bottom: 15px;
+    padding-right: 0;}
+h3{}
+.highlight{}
+.gold{color:#f8a411;}
+a.no_underline, a.no_underline:hover{
+    text-decoration: none;}
+.false_link{cursor: pointer;
+    display: inline;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;}
+
+.photo_thumb{overflow: hidden;}
+.photo_thumb:hover img {
+    transform: scale(1.1);
+}
+.photo_thumb img {
+    transition: all 0.2s linear 0s;
 }

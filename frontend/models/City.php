@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "city".
  *
@@ -12,8 +12,9 @@ use Yii;
  * @property string $text
  * @property string $image
  */
-class City extends \yii\db\ActiveRecord
+class City extends MyModel
 {
+    public $asdf;
     /**
      * @inheritdoc
      */
@@ -27,12 +28,15 @@ class City extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            [['title', 'image'], 'required'],
+        $rules=[
+            [['title'], 'required'],
             [['text'], 'string'],
+            [['asdf'], 'safe'],
             [['title'], 'string', 'max' => 20],
             [['image'], 'string', 'max' => 200],
         ];
+        
+        return ArrayHelper::merge(parent::rules(),$rules);
     }
 
     /**

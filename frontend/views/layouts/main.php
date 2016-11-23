@@ -45,8 +45,8 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'About us', 'url' => ['/page/1'], 'active'=>$about_active],
-        ['label' => 'Explore UAE', 'url' => ['/#']],
-        ['label' => 'Destinations', 'url' => ['/#']],
+        ['label' => 'Explore UAE', 'url' => ['/site/explore']],
+        ['label' => 'Destinations', 'url' => ['/site/destinations']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
@@ -69,9 +69,9 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
     ?>
 
     <div class="container">
-        <?php /*= Breadcrumbs::widget([
+        <?/*= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) */ ?>
+        ])  */?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>

@@ -8,6 +8,7 @@ use frontend\models\CitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * CityController implements the CRUD actions for City model.

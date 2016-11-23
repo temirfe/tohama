@@ -72,7 +72,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $dao=Yii::$app->db;
+        $cities=$dao->createCommand("SELECT id,title, image FROM city")->cache(86000)->queryAll();
+        return $this->render('index',['cities'=>$cities]);
     }
 
     /**
@@ -139,6 +141,20 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionExplore()
+    {
+        $dao=Yii::$app->db;
+        $cities=$dao->createCommand("SELECT id,title, image FROM city")->cache(86000)->queryAll();
+        return $this->render('explore',['cities'=>$cities]);
+    }
+
+    public function actionDestinations()
+    {
+        //$dao=Yii::$app->db;
+        //$cities=$dao->createCommand("SELECT id,title, image FROM city")->cache(86000)->queryAll();
+        return $this->render('destinations',['cities'=>'']);
     }
 
     /**
@@ -209,5 +225,23 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionImgDelete($id,$model_name)
+    {
+        $key=Yii::$app->request->post('key');
+        $webroot=Yii::getAlias('@webroot');
+        if(is_dir($dir=$webroot."/images/{$model_name}/".$id))
+        {
+            if(is_file($dir.'/'.$key)){
+                $expl=explode('_',$key);
+                $full=$expl[1];
+                @unlink($dir.'/'.$key);
+                @unlink($dir.'/'.$full);
+                Yii::$app->db->createCommand("UPDATE {$model_name} SET image='' WHERE id='{$id}'")->execute();
+            }
+        }
+        Yii::$app->response->format=\yii\web\Response::FORMAT_JSON;
+        return true;
     }
 }

@@ -14,7 +14,7 @@ use Yii;
  * @property string $image
  * @property integer $category
  */
-class Page extends \yii\db\ActiveRecord
+class Page extends MyModel
 {
     /**
      * @inheritdoc
