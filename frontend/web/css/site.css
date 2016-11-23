@@ -72,10 +72,6 @@ a.desc:after {
     content: "\e156";
 }
 
-.grid-view td {
-    white-space: nowrap;
-}
-
 .grid-view .filters input,
 .grid-view .filters select {
     min-width: 50px;
@@ -119,17 +115,12 @@ a.desc:after {
     outline: none;
 }
 .mynavbar{background-color: #fff; z-index: 2;border-radius: 0;}
-.logo{width:135px;}
+
 a.navbar-brand {
-    padding: 0;
+    padding: 0;margin-left: 0 !important;
 }
 div.navbar-header{}
-.logo_wrap{
-    background-color: #fff;
-    box-shadow: 0 0 2px 1px #e7b674;
-    margin-top: -1px;
-    padding: 15px 14px 20px 13px;
-}
+
 .navbar-nav > li > a {
     font-family: Roboto, sans-serif;
     font-size:16px;
@@ -148,4 +139,9 @@ div.navbar-header{}
 .nav > li > a:hover, .nav > li > a:focus {
     background-color: transparent;
     color:#f8a411;
+}
+.logo_wrap {
+    background: #fff url("/images/logo_text_black.png") no-repeat scroll center center / 163px auto;
+    height: 50px;
+    width: 163px;
 }

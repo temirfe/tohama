@@ -11,6 +11,10 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+$controller=Yii::$app->controller->id;
+$action=Yii::$app->controller->action->id;
+
+if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $about_active=true; else $about_active=false;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -30,8 +34,9 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
+
     NavBar::begin([
-        'brandLabel' => "<div class='logo_wrap'>".Html::img("@web/images/tohama_logo_300px.png",['class'=>'logo'])."</div>",
+        'brandLabel' => "<div class='logo_wrap'></div>",
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'mynavbar',
@@ -39,7 +44,7 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About us', 'url' => ['/page/1']],
+        ['label' => 'About us', 'url' => ['/page/1'], 'active'=>$about_active],
         ['label' => 'Explore UAE', 'url' => ['/#']],
         ['label' => 'Destinations', 'url' => ['/#']],
         ['label' => 'Contact', 'url' => ['/site/contact']],

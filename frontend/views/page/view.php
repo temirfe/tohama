@@ -11,13 +11,13 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pages'), 'url' => ['
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page-view">
-    <div class="col-md-4"></div>
+    <!--<div class="col-md-4"></div>
     <div class="col-md-8">
-        <h1><?= Html::encode($this->title) ?></h1>
 
-        <?=$model->text ?>
-    </div>
+    </div>-->
 
-    
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <?=$model->text ?>
 
 </div>
