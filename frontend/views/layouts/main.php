@@ -69,7 +69,7 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
     ?>
 
     <div class="container">
-        <?/*= Breadcrumbs::widget([
+        <?php /*= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ])  */?>
         <?= Alert::widget() ?>
