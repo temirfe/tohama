@@ -50,11 +50,17 @@ class ContactForm extends Model
      */
     public function sendEmail($email)
     {
-        return Yii::$app->mailer->compose()
+        /*return Yii::$app->mailer->compose()
             ->setTo($email)
             ->setFrom([$this->email => $this->name])
             ->setSubject($this->subject)
             ->setTextBody($this->body)
+            ->send();*/
+        return Yii::$app->mailer->compose()
+            ->setTo($email)
+            ->setFrom(['info@tohamatravel.com' => 'Tohama mailer'])
+            ->setSubject('User has sent message via contact form')
+            ->setTextBody('Name: '.$this->name.'. Subject: '.$this->subject.' E-mail: '.$this->email.' Message: '.$this->body)
             ->send();
     }
 }
