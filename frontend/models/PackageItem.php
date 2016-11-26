@@ -3,23 +3,25 @@
 namespace frontend\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
+
 /**
- * This is the model class for table "city".
+ * This is the model class for table "package_item".
  *
  * @property integer $id
+ * @property integer $parent_id
  * @property string $title
  * @property string $text
  * @property string $image
+ * @property string $price
  */
-class City extends MyModel
+class PackageItem extends MyModel
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'city';
+        return 'package_item';
     }
 
     /**
@@ -27,14 +29,13 @@ class City extends MyModel
      */
     public function rules()
     {
-        $rules=[
+        return [
+            [['parent_id'], 'integer'],
             [['title'], 'required'],
             [['text'], 'string'],
             [['title'], 'string', 'max' => 20],
-            [['image'], 'string', 'max' => 200],
+            [['image', 'price'], 'string', 'max' => 200],
         ];
-        
-        return ArrayHelper::merge(parent::rules(),$rules);
     }
 
     /**
@@ -44,9 +45,16 @@ class City extends MyModel
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'parent_id' => Yii::t('app', 'Parent ID'),
             'title' => Yii::t('app', 'Title'),
             'text' => Yii::t('app', 'Text'),
             'image' => Yii::t('app', 'Image'),
+            'price' => Yii::t('app', 'Price'),
         ];
+    }
+
+    public function getPackage()
+    {
+        return $this->hasOne(Package::className(), ['id' => 'parent_id']);
     }
 }

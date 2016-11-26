@@ -12,6 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\UploadedFile;
 
 /**
  * Site controller
@@ -65,16 +66,26 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionEditorUpload(){
+        $file=UploadedFile::getInstanceByName('upload');
+        $imageName=time().'.'.$file->extension;
+        $dir=Yii::getAlias('@webroot')."/images/editor/";
+        $file->saveAs($dir.'/' . $imageName);
+    }
+    public function actionEditorBrowse(){
+        return $dir=Yii::getAlias('@webroot')."/images/editor/";
+    }
     /**
      * Displays homepage.
      *
-     * @return mixed
+     * @return mixedh
      */
     public function actionIndex()
     {
         $dao=Yii::$app->db;
-        $cities=$dao->createCommand("SELECT id,title, image FROM city")->cache(86000)->queryAll();
-        return $this->render('index',['cities'=>$cities]);
+        $cities=$dao->createCommand("SELECT id,title, image FROM city")->queryAll();
+        $packages=$dao->createCommand("SELECT * FROM package ORDER BY id DESC")->queryAll();
+        return $this->render('index',['cities'=>$cities,'packages'=>$packages]);
     }
 
     /**

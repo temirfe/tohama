@@ -6,11 +6,17 @@ use yii\helpers\Html;
 
 $this->title = 'Explore UAE with us';
 $this->params['breadcrumbs'][] = $this->title;
+
+$dao=Yii::$app->db;
+$result = $dao->createCommand("SELECT * FROM page WHERE url='explore-uae'")->queryOne();
+if($result) $text=$result['text']; else $text='';
 ?>
 <div class="site-about">
     <div class="row">
         <div class="col-md-12">
             <h3>Explore <span class="highlight gold">UAE</span> with us</h3>
+            <?=$text;?>
+
             <div class="row">
                 <?php
                 foreach($cities as $city){

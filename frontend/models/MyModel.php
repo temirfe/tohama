@@ -69,7 +69,7 @@ class MyModel extends \yii\db\ActiveRecord
             $imagine=Image::getImagine()->open($tosave.'/'.$imageName);
             $imagine->thumbnail(new Box(1500, 1000))->save($tosave.'/'.$imageName);
             //$imagine->thumbnail(new Box(400, 250))->save($tosave.'/s_'.$imageName);
-            Image::thumbnail($tosave.'/'.$imageName,250, 250)->save($tosave.'/s_'.$imageName);
+            Image::thumbnail($tosave.'/'.$imageName,375, 200)->save($tosave.'/s_'.$imageName);
 
             Yii::$app->db->createCommand("UPDATE {$model_name} SET image='{$imageName}' WHERE id='{$this->id}'")->execute();
         }
@@ -83,8 +83,8 @@ class MyModel extends \yii\db\ActiveRecord
                 $image->saveAs($tosave.'/' . $imageName);
                 $imagine=Image::getImagine()->open($tosave.'/'.$imageName);
                 $imagine->thumbnail(new Box(1500, 1000))->save($tosave.'/' .$imageName);
-                //$imagine->thumbnail(new Box(400, 250))->save($tosave.'/s_'.$imageName);
-                Image::thumbnail($tosave.'/'.$imageName,250, 250)->save($tosave.'/s_'.$imageName);
+                $imagine->thumbnail(new Box(400, 250))->save($tosave.'/s_'.$imageName);
+                //Image::thumbnail($tosave.'/'.$imageName,250, 250)->save($tosave.'/s_'.$imageName);
             }
         }
     }

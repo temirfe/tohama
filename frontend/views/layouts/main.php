@@ -49,17 +49,17 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
     <?php
 
     NavBar::begin([
-        'brandLabel' => "<div class='logo_wrap'></div>",
+        'brandLabel' => "<div class='logo_wrap  logo_wrap_index js_logo_wrap'></div>",
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'mynavbar',
+            'class' => 'mynavbar navbar-fixed-top',
         ],
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'About us', 'url' => ['/page/1'], 'active'=>$about_active],
         ['label' => 'Explore UAE', 'url' => ['/site/explore']],
-        ['label' => 'Destinations', 'url' => ['/site/destinations']],
+        ['label' => 'Destinations', 'url' => ['/destination/show']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
