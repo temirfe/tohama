@@ -10,6 +10,10 @@ use yii\captcha\Captcha;
 
 $this->title = 'Contact';
 $this->params['breadcrumbs'][] = $this->title;
+
+$dao=Yii::$app->db;
+$result = $dao->createCommand("SELECT * FROM page WHERE url='contact'")->queryOne();
+if($result) $text=$result['text']; else $text='';
 ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -45,13 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-6">
-            Tohama Travel and Tourism LLC<br />
-            Office 901<br />
-            Al Kharbash Tower<br />
-            Dubia, UAE<br />
-            Tel: + 971 4 359 9015<br />
-            Fax: +971 4 359 9014<br />
-            Email: <a href="mailto:info@tohamatravel.com">info@tohamatravel.com</a>
+            <?=$text?>
 
         </div>
     </div>

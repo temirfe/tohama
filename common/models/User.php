@@ -26,6 +26,10 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    const ROLE_USER = 'User';
+    const ROLE_ADMIN = 'Administrator';
+    //const ROLE_MODER = 'Moderator';
+    //const ROLE_CONTENT = 'ContentManager';
 
     /**
      * @inheritdoc
@@ -52,6 +56,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['role', 'default', 'value' => self::ROLE_USER],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
@@ -185,5 +190,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public static function isAdmin()
+    {
+        if (static::findOne(['id' => Yii::$app->user->id, 'role' => self::ROLE_ADMIN])){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

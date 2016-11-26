@@ -4,22 +4,23 @@ namespace frontend\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+
 /**
- * This is the model class for table "city".
+ * This is the model class for table "package".
  *
  * @property integer $id
  * @property string $title
  * @property string $text
  * @property string $image
  */
-class City extends MyModel
+class Package extends MyModel
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'city';
+        return 'package';
     }
 
     /**
@@ -30,10 +31,10 @@ class City extends MyModel
         $rules=[
             [['title'], 'required'],
             [['text'], 'string'],
-            [['title'], 'string', 'max' => 20],
+            [['title'], 'string', 'max' => 500],
             [['image'], 'string', 'max' => 200],
         ];
-        
+
         return ArrayHelper::merge(parent::rules(),$rules);
     }
 

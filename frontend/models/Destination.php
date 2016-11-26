@@ -3,23 +3,26 @@
 namespace frontend\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
+
 /**
- * This is the model class for table "city".
+ * This is the model class for table "destination".
  *
  * @property integer $id
+ * @property integer $category_id
  * @property string $title
  * @property string $text
  * @property string $image
+ * @property string $price
+ * @property string $place
  */
-class City extends MyModel
+class Destination extends MyModel
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'city';
+        return 'destination';
     }
 
     /**
@@ -27,14 +30,13 @@ class City extends MyModel
      */
     public function rules()
     {
-        $rules=[
+        return [
+            [['category_id'], 'integer'],
             [['title'], 'required'],
             [['text'], 'string'],
             [['title'], 'string', 'max' => 20],
-            [['image'], 'string', 'max' => 200],
+            [['image', 'price', 'place'], 'string', 'max' => 200],
         ];
-        
-        return ArrayHelper::merge(parent::rules(),$rules);
     }
 
     /**
@@ -44,9 +46,12 @@ class City extends MyModel
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'category_id' => Yii::t('app', 'Category ID'),
             'title' => Yii::t('app', 'Title'),
             'text' => Yii::t('app', 'Text'),
             'image' => Yii::t('app', 'Image'),
+            'price' => Yii::t('app', 'Price (optional)'),
+            'place' => Yii::t('app', 'Place (optional)'),
         ];
     }
 }
