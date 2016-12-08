@@ -31,6 +31,7 @@ else if($controller=='destination') $dest_active="active";
                 <div class="<?=$package_active?>"><span class='panel-icon glyphicon glyphicon-tags'></span><?=Html::a('Packages', ['/package/index']); ?></div>
                 <div class="<?=$item_active?>"><span class='panel-icon glyphicon glyphicon-tag'></span><?=Html::a('Package Items', ['/item/index']); ?></div>
                 <div class="<?=$dest_active?>"><span class='panel-icon glyphicon glyphicon-globe'></span><?=Html::a('Destinations', ['/destination/index']); ?></div>
+                <div class="<?=$dest_active?>"><span class='panel-icon glyphicon glyphicon-user'></span><?=Html::a('Users', ['/user/index']); ?></div>
              </div>
              <div class="clear"></div>
                 <?php

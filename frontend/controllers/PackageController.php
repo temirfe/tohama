@@ -5,29 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Package;
 use frontend\models\PackageSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PackageController implements the CRUD actions for Package model.
  */
-class PackageController extends Controller
+class PackageController extends MyController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all Package models.

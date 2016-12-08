@@ -5,30 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Destination;
 use frontend\models\DestinationSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * DestinationController implements the CRUD actions for Destination model.
  */
-class DestinationController extends Controller
+class DestinationController extends MyController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all Destination models.
      * @return mixed

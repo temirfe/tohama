@@ -25,11 +25,14 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_NOT_ACTIVE = 20;
 
-    const ROLE_USER = 'User';
-    const ROLE_ADMIN = 'Administrator';
+    const ROLE_USER = 'user';
+    const ROLE_ADMIN = 'admin';
     //const ROLE_MODER = 'Moderator';
     //const ROLE_CONTENT = 'ContentManager';
+
+    public $password;
 
     /**
      * @inheritdoc
@@ -58,6 +61,20 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['role', 'default', 'value' => self::ROLE_USER],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+
+            ['password', 'required', 'on'=>'create'],
+            ['password', 'string', 'min' => 5],
         ];
     }
 
@@ -195,6 +212,24 @@ class User extends ActiveRecord implements IdentityInterface
     public static function isAdmin()
     {
         if (static::findOne(['id' => Yii::$app->user->id, 'role' => self::ROLE_ADMIN])){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+
+            if($this->password){
+                $this->setPassword($this->password);
+                $this->generateAuthKey();
+            }
+
             return true;
         } else {
             return false;

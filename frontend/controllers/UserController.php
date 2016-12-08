@@ -3,24 +3,23 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\PackageItem;
-use frontend\models\PackageItemSearch;
+use common\models\User;
+use frontend\models\UserSearch;
 use yii\web\NotFoundHttpException;
-use yii\helpers\ArrayHelper;
 
 /**
- * ItemController implements the CRUD actions for PackageItem model.
+ * UserController implements the CRUD actions for User model.
  */
-class ItemController extends MyController
+class UserController extends MyController
 {
 
     /**
-     * Lists all PackageItem models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PackageItemSearch();
+        $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -30,7 +29,7 @@ class ItemController extends MyController
     }
 
     /**
-     * Displays a single PackageItem model.
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      */
@@ -42,30 +41,28 @@ class ItemController extends MyController
     }
 
     /**
-     * Creates a new PackageItem model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new PackageItem();
-
+        $model = new User();
+        $model->scenario = 'create';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $auth = Yii::$app->authManager;
+            $newRole = $auth->getRole($model->role);
+            $auth->assign($newRole, $model->id);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-
-            $dao=Yii::$app->db;
-            $result = $dao->createCommand("SELECT id,title FROM package ORDER BY `id` DESC")->queryAll();
-            $res=ArrayHelper::map($result,'id','title');
             return $this->render('create', [
                 'model' => $model,
-                'packages'=>$res,
             ]);
         }
     }
 
     /**
-     * Updates an existing PackageItem model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -73,22 +70,28 @@ class ItemController extends MyController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $old_role=$model->role;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if($old_role!=$model->role){
+                $auth = Yii::$app->authManager;
+                $item = $auth->getRole($old_role);
+                $auth->revoke($item,$model->id);
+
+                $newRole = $auth->getRole($model->role);
+                $auth->assign($newRole, $model->id);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $dao=Yii::$app->db;
-            $result = $dao->createCommand("SELECT id,title FROM package ORDER BY `id` DESC")->queryAll();
-            $res=ArrayHelper::map($result,'id','title');
             return $this->render('update', [
                 'model' => $model,
-                'packages'=>$res,
             ]);
         }
     }
 
     /**
-     * Deletes an existing PackageItem model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -101,15 +104,15 @@ class ItemController extends MyController
     }
 
     /**
-     * Finds the PackageItem model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return PackageItem the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = PackageItem::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

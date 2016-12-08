@@ -42,7 +42,7 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
 
 <div class="wrap">
     <?php
-    if(!$isGuest && $user_role=='Administrator'){include_once('_adminpanel.php');}
+    if(!$isGuest && $user_role=='admin'){include_once('_adminpanel.php');}
     //elseif(!$isGuest && $user_role=='Moderator'){include_once('_moderpanel.php');}
     //elseif(!$isGuest && $user_role=='ContentManager'){include_once('_cmanagerpanel.php');}
     ?>
