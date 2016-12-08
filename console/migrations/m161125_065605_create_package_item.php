@@ -9,7 +9,7 @@ class m161125_065605_create_package_item extends Migration
         $this->createTable('package_item', [
             'id' => $this->primaryKey(),
             'parent_id' => $this->integer('6')->notNull()->defaultValue(0),
-            'title' => $this->string('20')->notNull(),
+            'title' => $this->string('500')->notNull(),
             'text' => $this->text(),
             'image' =>$this->string('200')->notNull(),
             'price' => $this->string('200')->notNull(),

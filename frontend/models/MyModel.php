@@ -53,11 +53,11 @@ class MyModel extends \yii\db\ActiveRecord
 
         $model_name=Yii::$app->controller->id;
         $dir=Yii::getAlias('@webroot')."/images/{$model_name}/";
-        if (!file_exists($dir)) {@mkdir($dir);}
+        if (!file_exists($dir)) {mkdir($dir);}
 
         $tosave=$dir.$this->id;
         if (!file_exists($tosave)) {
-            @mkdir($tosave);
+            mkdir($tosave);
         }
 
         if($this->imageFile){

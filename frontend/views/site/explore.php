@@ -8,7 +8,7 @@ $this->title = 'Explore UAE with us';
 $this->params['breadcrumbs'][] = $this->title;
 
 $dao=Yii::$app->db;
-$result = $dao->createCommand("SELECT * FROM page WHERE url='explore-uae'")->queryOne();
+$result = $dao->createCommand("SELECT * FROM page WHERE url='explore'")->queryOne();
 if($result) $text=$result['text']; else $text='';
 ?>
 <div class="site-about">
@@ -16,7 +16,8 @@ if($result) $text=$result['text']; else $text='';
         <div class="col-md-12">
             <h3>Explore <span class="highlight gold">UAE</span> with us</h3>
             <?=$text;?>
-
+<br />
+<br />
             <div class="row">
                 <?php
                 foreach($cities as $city){

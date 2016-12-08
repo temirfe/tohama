@@ -9,7 +9,7 @@ class m161126_070502_create_destination extends Migration
         $this->createTable('destination', [
             'id' => $this->primaryKey(),
             'category_id' => $this->integer('6')->notNull()->defaultValue(0),
-            'title' => $this->string('20')->notNull(),
+            'title' => $this->string('250')->notNull(),
             'text' => $this->text(),
             'image' =>$this->string('200')->notNull(),
             'price' => $this->string('200')->notNull(),

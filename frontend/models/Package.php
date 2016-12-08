@@ -33,6 +33,7 @@ class Package extends MyModel
             [['text'], 'string'],
             [['title'], 'string', 'max' => 500],
             [['image'], 'string', 'max' => 200],
+            [['description'], 'string', 'max' => 255],
         ];
 
         return ArrayHelper::merge(parent::rules(),$rules);
@@ -48,6 +49,7 @@ class Package extends MyModel
             'title' => Yii::t('app', 'Title'),
             'text' => Yii::t('app', 'Text'),
             'image' => Yii::t('app', 'Image'),
+            'description' => Yii::t('app', 'Short Description'),
         ];
     }
 }

@@ -31,9 +31,9 @@ class PackageItem extends MyModel
     {
         return [
             [['parent_id'], 'integer'],
-            [['title'], 'required'],
+            [['title','parent_id'], 'required'],
             [['text'], 'string'],
-            [['title'], 'string', 'max' => 20],
+            [['title'], 'string', 'max' =>500],
             [['image', 'price'], 'string', 'max' => 200],
         ];
     }

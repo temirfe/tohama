@@ -173,6 +173,7 @@ a.desc:after {
 .mr15{margin-right: 15px;}
 .mr20{margin-right: 20px;}
 .mr25{margin-right: 25px;}
+.mr30{margin-right: 30px;}
 .mtb10{margin:10px 0;}
 .mtb15{margin:15px 0;}
 .btn0{border:none;background-color: transparent;padding:0;}
@@ -371,11 +372,53 @@ a.no_underline, a.no_underline:hover{
 }
 .item_price{}
 .item_text{}
-.img_pack_box{}
-.img_pack_title{}
-.img_pack_text{}
+.img_pack_box{margin-bottom: 15px;
+    padding-right: 0;}
+.img_pack_title{ min-height: 89px;}
+.img_pack_text{font-size: 13px;}
 .img_pack_wrap{
     background-color: #e9e9e9;
     border-bottom: 1px solid #e0e0e0;
     border-radius: 0 0 0.176471em 0.176471em;}
 .img_pack_wrap:hover{background-color: #f1f1f1;}
+.bs-docs-sidebar .nav > li > a {
+    color: #767676;
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 20px;
+}
+.bs-docs-sidebar .nav > .active:focus > a, .bs-docs-sidebar .nav > .active:hover > a, .bs-docs-sidebar .nav > .active > a {
+    background-color: transparent;
+    border-left: 2px solid #f8a411;
+    color: #f8a411;
+    font-weight: 700;
+    padding-left: 18px;
+}
+.affix {
+    top:23px;
+}
+
+.scrollToTop{
+    background: whiteSmoke none repeat scroll 0 0;
+    bottom: 10px;
+    color: #444;
+    font-weight: bold;
+    height: 39px;
+    padding: 10px;
+    position: fixed;
+    right: 20px;
+    text-align: center;
+    text-decoration: none;
+    width: 40px;
+    display:none;
+}
+.scrollToTop:hover{
+    text-decoration:none;
+    background-color:#e2e2e2;
+}
+.container img{max-width:100%; height: auto !important;}
+.map_view {
+    height: 400px;
+    width: 100%;
+}

@@ -40,15 +40,21 @@ else if($controller=='destination') $dest_active="active";
                 {
                     ?>
                     <div class="operations" style="padding: 4px 13px; background-color: #000;">
-                        <?= Html::a('<span class="glyphicon glyphicon-list panel-icon2"></span> List', ['index'], ['class' => '','style'=>'margin-right:30px;']) ?>
-                        <?= Html::a('<span class="glyphicon glyphicon-plus panel-icon2"></span> Create', ['create'], ['class' => '','style'=>'margin-right:30px;']) ?>
-                        <?= Html::a('<span class="glyphicon glyphicon-pencil panel-icon2"></span> Update', ['update', 'id' => $id], ['class' => '','style'=>'margin-right:30px;']) ?>
+                        <?= Html::a('<span class="glyphicon glyphicon-list panel-icon2"></span> List', ['index'], ['class' => 'mr30']) ?>
+                        <?= Html::a('<span class="glyphicon glyphicon-plus panel-icon2"></span> Create', ['create'], ['class' => 'mr30']) ?>
+                        <?= Html::a('<span class="glyphicon glyphicon-pencil panel-icon2"></span> Update', ['update', 'id' => $id], ['class' => 'mr30']) ?>
                         <?= Html::a('<span class="glyphicon glyphicon-remove panel-icon2"></span> Delete', ['delete', 'id' => $id], [
                             'data' => [
                                 'confirm' => 'Are you sure you want to delete?',
                                 'method' => 'post',
                             ],'style'=>'margin-right:30px;'
                         ]) ?>
+                        <?php
+                        if($controller=='package'){
+                            echo Html::a('<span class="glyphicon glyphicon-tag panel-icon2"></span> Add item',
+                                ['/item/create', 'parent_id' => $id], ['class' => 'mr30']);
+                        }
+                        ?>
                     </div>
                 <?php
                 }

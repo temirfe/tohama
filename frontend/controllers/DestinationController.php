@@ -42,7 +42,7 @@ class DestinationController extends Controller
     }
 
 
-    public function actionAdmin()
+    public function actionIndex()
     {
         $searchModel = new DestinationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

@@ -16,10 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <span class="mr10"><?=$model->place;?></span>
     <span><?=$model->price?></span>
     <p><?=$model->text?></p>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-sm-12">
-            <?=Html::img('/images/destination/'.$model->id.'/'.$model->image,['class'=>'img-responsive'])?>
+            <?php /*echo Html::img('/images/destination/'.$model->id.'/'.$model->image,['class'=>'img-responsive'])*/?>
         </div>
-    </div>
+    </div>-->
 
 </div>

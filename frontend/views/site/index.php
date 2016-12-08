@@ -36,7 +36,7 @@ $this->title = 'Tohama Travel & Tourism';
                             <h4 class="mt0 mb2">
                                 <?=Html::a($pack['title']."<span class='false_link'></span>",['package/view','id'=>$pack['id']],['class'=>'no_underline black']);?>
                             </h4>
-                            <div class="img_pack_text"><?=$pack['text'];?></div>
+                            <div class="img_pack_text"><?=$pack['description'];?></div>
                         </div>
                             
                     </div>

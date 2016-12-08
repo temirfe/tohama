@@ -30,7 +30,9 @@ $result = Yii::$app->db->createCommand("SELECT id,title FROM package ORDER BY id
                 'header'=>'Package',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return $model->package->title;
+                    if(isset($model->package->title)) $title=$model->package->title;
+                    else $title="N/A";
+                    return $title;
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'parent_id', ArrayHelper::map($result, 'id', 'title'),['class'=>'form-control','prompt' => 'All']),
             ],

@@ -7,6 +7,9 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
+use frontend\assets\MapAsset;
+
+MapAsset::register($this);
 
 $this->title = 'Contact';
 $this->params['breadcrumbs'][] = $this->title;
@@ -50,6 +53,8 @@ if($result) $text=$result['text']; else $text='';
         <div class="col-md-1"></div>
         <div class="col-md-6">
             <?=$text?>
+
+            <div id="map_view" class="map_view mt20"></div>
 
         </div>
     </div>

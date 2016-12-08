@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\StringHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\PageSearch */
@@ -22,13 +23,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'url:url',
             'title',
-            'text:ntext',
-            'image',
+            [
+                'attribute'=>'text',
+                'format'=>'raw',
+                'value'=>function($model){
+                    return StringHelper::truncate($model->text,150,'...');
+                }
+            ],
             // 'category',
 
             ['class' => 'yii\grid\ActionColumn'],

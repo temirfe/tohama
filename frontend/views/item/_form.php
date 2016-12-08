@@ -9,13 +9,15 @@ use dosamigos\ckeditor\CKEditor;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\PackageItem */
 /* @var $form yii\widgets\ActiveForm */
+$parent_id=Yii::$app->request->get('parent_id');
+if($parent_id) $model->parent_id=$parent_id;
 ?>
 
 <div class="package-item-form">
 
     <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'parent_id')->dropDownList($packages,[]); ?>
+    <?= $form->field($model, 'parent_id')->dropDownList($packages,['prompt'=>'Select..']); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
@@ -37,7 +39,7 @@ use dosamigos\ckeditor\CKEditor;
                 ['name'=>'insert','items'=>['Image','Table','HorizontalRule']],
                 ['name'=>'paragraph','items'=>['NumberedList','BulletedList','-','Outdent','Indent']],
                 ['name'=>'links','items'=>['Link','Unlink']],
-                ['name'=>'styles','items'=>['Styles','Format','Font','FontSize']],
+                ['name'=>'styles','items'=>['Styles','Format','Font','FontSize','TextColor']],
                 ['name'=>'tools','items'=>['Maximize']],
             ]
         ]

@@ -37,7 +37,7 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
     <link rel="shortcut icon" href="/images/favicon2.ico" type="image/x-icon">
     <link rel="icon" href="/images/favicon2.ico" type="image/x-icon">
 </head>
-<body>
+<body data-spy="scroll" data-target="#myScrollspy" data-offset="140" id="top">
 <?php $this->beginBody() ?>
 
 <div class="wrap">
@@ -100,7 +100,7 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
         <p class="pull-left">&copy; Tohama Travel & Tourism LLC <?= date('Y') ?></p>
     </div>
 </footer>
-
+<a href="#" class="scrollToTop"><span class="glyphicon glyphicon-arrow-up"></span></a>
 <?php $this->endBody() ?>
 </body>
 </html>

@@ -34,7 +34,7 @@ class Destination extends MyModel
             [['category_id'], 'integer'],
             [['title'], 'required'],
             [['text'], 'string'],
-            [['title'], 'string', 'max' => 20],
+            [['title'], 'string', 'max' => 250],
             [['image', 'price', 'place'], 'string', 'max' => 200],
         ];
     }
