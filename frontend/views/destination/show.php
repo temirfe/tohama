@@ -42,7 +42,7 @@ foreach($destinations as $dest){
                         <div class="img_pack_wrap">
                             <?php
                             $img=Html::img("/images/destination/".$destination['id']."/s_".$destination['image'],['class'=>'img-responsive']);
-                            echo "<div class=''>".Html::a($img,['destination/view','id'=>$destination['id']])."</div>";
+                            echo "<div class='img_pack_thumb'>".Html::a($img,['destination/view','id'=>$destination['id']])."</div>";
                             ?>
 
                             <div class="img_pack_title pad15">

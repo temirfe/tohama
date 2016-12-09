@@ -31,7 +31,7 @@ class MyController extends Controller
             $view=[
                 'actions' => ['view'],
                 'allow' => true,
-                'roles' => ['view'],
+                'roles' => ['?','@'],
             ];
         }
         return [
@@ -43,6 +43,7 @@ class MyController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
+                'only'=>['create','update','delete','index','view'],
                 'rules' => [
                     [
                         'actions' => ['create','update','delete'],

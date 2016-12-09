@@ -59,7 +59,7 @@ echo newerton\fancybox\FancyBox::widget([
             <?php
                 $webroot=Yii::getAlias('@webroot');
                 foreach($children as $child){
-                    echo "<div id='section{$child['id']}' class='mb20 bbgray'>";
+                    echo "<div id='section{$child['id']}' class='mb20 bbgray pt60'>";
                     echo "<div class='item_title mb15'>".$child['title']."</div>";
                     echo "<span class='label label-primary item_price font16 mb10 iblock'>".$child['price']."</span>";
                     echo "<div class='item_text mt5 mb15'>".$child['text']."</div>";
@@ -87,7 +87,7 @@ echo newerton\fancybox\FancyBox::widget([
         </div>
         <div class="col-md-3 pr0">
             <div id="myScrollspy">
-                <nav class="bs-docs-sidebar hidden-print hidden-sm hidden-xs" data-spy="affix" data-offset-top="200">
+                <nav class="bs-docs-sidebar hidden-print hidden-sm hidden-xs" data-spy="affix" data-offset-top="75">
                     <ul class="nav bs-docs-sidenav">
                         <?php
                         foreach($children as $child){
