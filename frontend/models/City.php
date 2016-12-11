@@ -29,6 +29,7 @@ class City extends MyModel
     {
         $rules=[
             [['title'], 'required'],
+            [['country_id'], 'integer'],
             [['text'], 'string'],
             [['title'], 'string', 'max' => 20],
             [['image'], 'string', 'max' => 200],
@@ -45,6 +46,7 @@ class City extends MyModel
         return [
             'id' => Yii::t('app', 'ID'),
             'title' => Yii::t('app', 'Title'),
+            'country_id' => Yii::t('app', 'Country'),
             'text' => Yii::t('app', 'Text'),
             'image' => Yii::t('app', 'Image'),
         ];
