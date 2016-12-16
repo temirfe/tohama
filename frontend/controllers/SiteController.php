@@ -83,9 +83,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $dao=Yii::$app->db;
-        $cities=$dao->createCommand("SELECT id,title, image FROM city")->queryAll();
+        //$cities=$dao->createCommand("SELECT id,title, image FROM city")->queryAll();
         $packages=$dao->createCommand("SELECT * FROM package ORDER BY id DESC")->queryAll();
-        return $this->render('index',['cities'=>$cities,'packages'=>$packages]);
+        return $this->render('index',['packages'=>$packages]);
     }
 
     /**

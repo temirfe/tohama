@@ -378,7 +378,7 @@ a.no_underline, a.no_underline:hover{
 .img_pack_thumb{ height: 165px;
     overflow: hidden;}
 .img_pack_thumb img{}
-.img_pack_title{ min-height: 89px;}
+.img_pack_title{ height: 107px;}
 .img_pack_text{font-size: 13px; max-height: 36px;
     overflow: hidden;}
 .img_pack_wrap{
@@ -406,7 +406,7 @@ a.no_underline, a.no_underline:hover{
 
 .scrollToTop{
     background: whiteSmoke none repeat scroll 0 0;
-    bottom: 10px;
+    bottom: 45px;
     color: #444;
     font-weight: bold;
     height: 39px;
@@ -427,3 +427,4 @@ a.no_underline, a.no_underline:hover{
     height: 400px;
     width: 100%;
 }
+.file-live-thumbs img{width:100px;}

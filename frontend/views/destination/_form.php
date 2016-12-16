@@ -14,7 +14,9 @@ $dest_categ=['Being lazy on the beach',
     'Paragliding',
     'Kite Surfing',
     'Medical & cosmetology treatment',
-    'Wine & Safari'];
+    'Wine & Safari',
+    'Hot offers'
+];
 ?>
 
 <div class="destination-form">

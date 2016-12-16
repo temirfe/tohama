@@ -14,11 +14,13 @@ $pages_active='';
 $package_active='';
 $item_active='';
 $dest_active='';
+$user_active='';
 $controller=Yii::$app->controller->id;
 if($controller=='page') $pages_active="active";
 else if($controller=='package') $package_active="active";
 else if($controller=='item') $item_active="active";
 else if($controller=='destination') $dest_active="active";
+else if($controller=='user') $user_active="active";
 ?>
 <div class="admpanel_top">
       <div class="admpanel-title">
@@ -31,7 +33,7 @@ else if($controller=='destination') $dest_active="active";
                 <div class="<?=$package_active?>"><span class='panel-icon glyphicon glyphicon-tags'></span><?=Html::a('Packages', ['/package/index']); ?></div>
                 <div class="<?=$item_active?>"><span class='panel-icon glyphicon glyphicon-tag'></span><?=Html::a('Package Items', ['/item/index']); ?></div>
                 <div class="<?=$dest_active?>"><span class='panel-icon glyphicon glyphicon-globe'></span><?=Html::a('Destinations', ['/destination/index']); ?></div>
-                <div class="<?=$dest_active?>"><span class='panel-icon glyphicon glyphicon-user'></span><?=Html::a('Users', ['/user/index']); ?></div>
+                <div class="<?=$user_active?>"><span class='panel-icon glyphicon glyphicon-user'></span><?=Html::a('Users', ['/user/index']); ?></div>
              </div>
              <div class="clear"></div>
                 <?php
