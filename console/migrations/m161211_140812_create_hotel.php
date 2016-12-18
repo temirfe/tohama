@@ -22,7 +22,7 @@ class m161211_140812_create_hotel extends Migration
             'address' => $this->string()->notNull(),
             'image' => $this->string()->notNull(),
             'latlong' => $this->string(20)->notNull(),
-            'sku' => $this->string(20)->notNull(),
+            'sku' => $this->string(1000)->notNull(),
             'stars' => $this->smallInteger()->notNull(),
         ], $tableOptions);
 
