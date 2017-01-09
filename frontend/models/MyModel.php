@@ -43,6 +43,17 @@ class MyModel extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'imageFile' => Yii::t('app', 'Main Image'),
+            'imageFiles' => Yii::t('app', 'Other Images'),
+        ];
+    }
+
     protected function saveImage(){
         $this->imageFile = UploadedFile::getInstance($this, 'imageFile');
         $this->imageFiles = UploadedFile::getInstances($this, 'imageFiles');

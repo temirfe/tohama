@@ -5,10 +5,14 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
 use dosamigos\ckeditor\CKEditor;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\City */
 /* @var $form yii\widgets\ActiveForm */
+$dao=Yii::$app->db;
+$result = $dao->createCommand("SELECT id,title FROM country")->queryAll();
+$res=ArrayHelper::map($result,'id','title');
 ?>
 
 <div class="city-form">
@@ -16,6 +20,8 @@ use dosamigos\ckeditor\CKEditor;
     <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
     <?= $form->errorSummary($model); ?>
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'country_id')->dropDownList($res,['prompt'=>'Select..']); ?>
 
     <?= $form->field($model, 'text')->widget(CKEditor::className(), [
         'options' => ['rows' => 6],

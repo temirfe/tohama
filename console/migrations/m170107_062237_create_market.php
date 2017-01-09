@@ -2,29 +2,30 @@
 
 use yii\db\Migration;
 
-class m161211_140757_create_country extends Migration
+class m170107_062237_create_market extends Migration
 {
     public function up()
     {
-        /*$tableOptions = null;
+        $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%country}}', [
+        $this->createTable('{{%market}}', [
             'id' => $this->primaryKey(),
-            'title' => $this->string(100)->notNull(),
-            'iso' => $this->string(2)->notNull(),
-            'iso3' => $this->string(3)->notNull(),
-            'phonecode' => $this->integer(5)->notNull(),
-            'region' => $this->string(100)->notNull(),
-        ], $tableOptions);*/
+            'title' => $this->string(50)->notNull(),
+            'code' => $this->integer(6)->notNull(),
+            'country_id' => $this->integer(6)->notNull(),
+        ], $tableOptions);
+
+        $this->createIndex('idx_market_country', 'market', 'country_id');
+        $this->createIndex('idx_market_title', 'market', 'code');
     }
 
     public function down()
     {
-        echo "m161211_140757_create_country cannot be reverted.\n";
+        echo "m170107_062237_create_market cannot be reverted.\n";
 
         return false;
     }

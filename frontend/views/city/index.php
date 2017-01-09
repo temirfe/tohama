@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\CitySearch */
@@ -9,6 +10,7 @@ use yii\grid\GridView;
 
 $this->title = Yii::t('app', 'Cities');
 $this->params['breadcrumbs'][] = $this->title;
+$result = Yii::$app->db->createCommand("SELECT id,title FROM country")->queryAll();
 ?>
 <div class="city-index">
 
@@ -22,12 +24,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+            ['attribute' => 'id', 'contentOptions'=>['width'=>80]],
             'title',
-            'text:ntext',
-            'image',
+            [
+                'attribute' => 'country_id',
+                'header'=>'Country',
+                'format' => 'raw',
+                'value' => function($model) {
+                    if(isset($model->country->title)) $title=$model->country->title;
+                    else $title="N/A";
+                    return $title;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'country_id', ArrayHelper::map($result, 'id', 'title'),['class'=>'form-control','prompt' => 'All']),
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

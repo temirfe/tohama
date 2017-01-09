@@ -51,4 +51,9 @@ class City extends MyModel
             'image' => Yii::t('app', 'Image'),
         ];
     }
+
+    public function getCountry()
+    {
+        return $this->hasOne(Country::className(), ['id' => 'country_id']);
+    }
 }

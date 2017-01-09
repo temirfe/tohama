@@ -36,3 +36,34 @@ $('.scrollToTop').click(function(e){
     $('html, body').animate({scrollTop : 0},500);
     return false;
 });
+
+//city depdrop on country
+$('#hotel-country_id').on('change',function(){
+    var country_id=$(this).val();
+    $.ajax({
+            method: "POST",
+            url: "/city/country-cities",
+            data: { country_id: country_id }
+        })
+        .done(function( msg ) {
+            $('#hotel-city_id').html(msg);
+        });
+});
+
+//add skus
+$('.js_add_sku').click(function (e) {
+    e.preventDefault();
+    var inp=$('.js_sku_form').find('div').clone();
+    $('.js_skus').append(inp);
+});
+
+//grab loading
+var sub_but=$('.js_grab_submit');
+sub_but.click(function(){
+    $('.js_grab_loading').show();
+    $('.alert').hide();
+});
+
+$('.js_excel_form').submit(function(){
+    sub_but.attr("disabled", true);
+});
