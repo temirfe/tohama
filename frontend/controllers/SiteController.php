@@ -300,29 +300,72 @@ class SiteController extends Controller
             $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}'";
         }
         $skus_rows = $dao->createCommand($skus_query)->queryAll();
-        $skus=ArrayHelper::map($skus_rows,'id','title');
 
         $dir=Yii::getAlias('@webroot');
         if(is_file($file=$dir.'/upload/'.$filename)){
             $objReader =  \PHPExcel_IOFactory::createReaderForFile($file);
             $objReader->setReadDataOnly(true);
             $objPHPExcel=$objReader->load($file);
+            //$parse_result=$this->parseSingleSheet($objPHPExcel,$skus_rows);
+            $parse_result=$this->parseSheets($objPHPExcel, $skus_rows);
+            $this->saveResult($parse_result,$data);
+            return $parse_result;
 
-            $sheets = [];
-            foreach ($objPHPExcel->getAllSheets() as $sheet) {
-                $sheet_title=$sheet->getTitle();
-                if(in_array($sheet_title, $skus)){
-                    $sheets[$sheet_title]['result']="<span style='color:green'>found</span>";
-                    $arrows=$sheet->toArray();
-                    $sheets[$sheet_title]['rows']=$this->getRows($arrows);
-                }
-                else {
-                    $sheets[$sheet_title]['result']="<span style='color:red'>not found</span>";
-                }
-            }
-            return $sheets;
         }
         else return 'not a valid file';
+    }
+
+    protected function saveResult($result,$data){
+        $batch_row=[];
+        foreach($result as $sheet_title=>$sheet_array){
+            if($sheet_array['found']){
+                foreach($sheet_array['rows'] as $sheet_row){
+                    if(strtolower($sheet_row[0])!='room type'){
+                        $sheet_row[12]=$sheet_array['hotel_id'];
+                        $sheet_row[13]=$data['country_id'];
+                        $sheet_row[14]=$data['city_id'];
+                        $batch_row[]=$sheet_row;
+                    }
+                }
+            }
+        }
+        Yii::$app->db->createCommand()->batchInsert('roomprice',
+            ['room','season','meal_plan','date_from','date_to','sgl_room','dbl_person','third_pax','adult_hb','child_bb','child_eb','child_hb','hotel_id', 'country_id','city_id'],
+            $batch_row
+        )->execute();
+    }
+
+    protected function parseSingleSheet($objPHPExcel, $skus_rows){
+        $sheets = [];
+        //$skus=ArrayHelper::map($skus_rows,'id','title');
+        //$hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
+        $objPHPExcel->setActiveSheetIndex(2);
+        $objWorksheet = $objPHPExcel->getActiveSheet();
+        $sheet_title=$objWorksheet->getTitle();
+        $arrows=$objWorksheet->toArray();
+        $sheets[$sheet_title]['found']=true;
+        $sheets[$sheet_title]['hotel_id']=4;
+        $sheets[$sheet_title]['rows']=$this->getRows($arrows);
+        return $sheets;
+    }
+
+    protected function parseSheets($objPHPExcel,$skus_rows){
+        $sheets = [];
+        $skus=ArrayHelper::map($skus_rows,'id','title');
+        $hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
+        foreach ($objPHPExcel->getAllSheets() as $sheet) {
+            $sheet_title=$sheet->getTitle();
+            if($sku_id=array_search($sheet_title, $skus)){
+                $sheets[$sheet_title]['found']=true;
+                $sheets[$sheet_title]['hotel_id']=$hotel_ids[$sku_id];
+                $arrows=$sheet->toArray();
+                $sheets[$sheet_title]['rows']=$this->getRows($arrows);
+            }
+            else {
+                $sheets[$sheet_title]['found']=false;
+            }
+        }
+        return $sheets;
     }
 
     protected function getRows($arrows){
@@ -405,50 +448,20 @@ class SiteController extends Controller
     }
 
     public function actionTest(){
-
         $dao=Yii::$app->db;
-        $countries_query = $dao->createCommand("SELECT id,title FROM country")->queryAll();
-        $countries=ArrayHelper::map($countries_query,'id','title');
-        $cities_query = $dao->createCommand("SELECT id,title FROM city")->queryAll();
-        $cities=ArrayHelper::map($cities_query,'id','title');
+        $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='234' AND city_id='1' AND stars='5'";
 
-        $loc=[];
-        $text="Casablanca Road, Near Airport, Garhoud, Dubai, United Arab Emirates";
-        $array=explode(',',$text);
-        $loc['country']=trim(end($array));
-        $loc['city']=trim(prev($array));
-        $loc['sublocality']=trim(prev($array));
+        $skus_rows = $dao->createCommand($skus_query)->queryAll();
+        $skus=ArrayHelper::map($skus_rows,'id','title');
+        $skus2=ArrayHelper::map($skus_rows,'id','hotel_id');
+        echo "<pre>";
+        print_r($skus);
+        echo "/<pre>";
 
-        //print_r($countries);
-
-        if(!empty($loc['country']) && $country_id=array_search($loc['country'],$countries)){echo $country_id;} else echo $loc['country'];
-        //if(!empty($loc['city']) && $city_id=array_search($loc['city'],$cities)){echo $city_id;} else echo 'bad';
-        //if(in_array('United Arab Emirates',$countries)){echo 'good';} else echo 'bad';
-
-        /*$myar=['United Arab Emirates','suka'];
-        if(in_array('United Arab Emirates',$myar)){echo 'good';} else echo 'bad';*/
-
-        /*$map=file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?latlng=25.2473233281746,55.3454008698463");
-        $jmap=json_decode($map,true);
-        if(!empty($jmap['status']) && $jmap['status']=='OK'){
-            if(!empty($jmap['results'])){
-                foreach($jmap['results'] as $result){
-                    if(!empty($result['address_components'])){
-                        foreach($result['address_components'] as $component){
-                            if($component['long_name']){$name=$component['long_name'];}
-                            if(!empty($component['types'])){
-                                foreach($component['types'] as $type){
-                                    if($type=='sublocality' && !empty($name)){$loc['sublocality']=$name;}
-                                    if($type=='locality' && !empty($name)){$loc['city']=$name;}
-                                    if($type=='country' && !empty($name)){$loc['country']=$name;}
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
-        //print_r($loc);
+        echo "<pre>";
+        print_r($skus2);
+        echo "/<pre>";
     }
+
 
 }

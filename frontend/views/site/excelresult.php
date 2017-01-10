@@ -17,21 +17,32 @@ $this->title = $name.' - Tohama Travel & Tourism LLC';
     <h1><?= Html::encode($name) ?></h1>
 
     <?php
-    if(is_array($data)){
+    foreach($data as $sheet_title=>$sheet_array){
+        if($sheet_array['found']){
+            echo $sheet_title."<br />";
+            /*foreach($sheet_array['rows'] as $sheet_rows){
+                echo "<pre>";
+                print_r($sheet_rows);
+                echo "</pre>";
+            }*/
+            echo "<br />";
+        }
+    }
+    /*if(is_array($data)){
         $i=0;
         foreach($data as $k=>$value){
-            foreach($value as $val){
-                echo $i.') '.$k;
+            foreach($value as $k2=>$val){
+                echo $i.') key1:'.$k.' key2:'.$k2;
                 if(is_array($val)){
-                    echo ' '.count($val)."<br />";
+                    echo ' count:'.count($val)."<br />";
                 }
-                else echo ' '.$val."<br />";
+                else echo ' val:'.$val."<br />";
             }
             $i++;
             echo "<br />--<br />";
         }
     }
-    else echo $data;
+    else echo $data;*/
 
     $execution_minutes=$time/60;
 
