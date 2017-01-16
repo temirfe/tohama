@@ -164,6 +164,7 @@ a.desc:after {
 .mt3{margin-top:3px;}
 .mt4{margin-top:4px;}
 .mt5{margin-top:5px;}
+.mt6{margin-top:6px;}
 .mt7{margin-top:7px;}
 .mt15{margin-top: 15px;}
 .mt10{margin-top: 10px;}
@@ -427,4 +428,80 @@ a.no_underline, a.no_underline:hover{
     height: 400px;
     width: 100%;
 }
-.file-live-thumbs img{width:100px;}
+.file-live-thumbs img{width:100px !important;}
+.file-drop-zone-title { padding: 0;}
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #e99707; /* Blue */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.sprite_thumb {
+    border: 1px solid transparent;
+    height: 37px;
+    width: 37px;
+    display: inline-block;
+    float: left;
+    overflow: hidden;
+    vertical-align: top;
+    outline: 3px solid #5cb9ff;
+}
+
+.view_img_wrap{}
+.main_img_wrap{max-height: 450px; overflow: hidden; position: relative;}
+.thumbs_wrap{ overflow: hidden;}
+.thumbs_wrap ul{margin: 0;padding: 0;}
+.thumbs_wrap li{list-style-type: none; margin-top: 2px;float: left;}
+.thumbs_wrap a{border: 2px solid #fff;display: block;
+    height: 37px;
+    overflow: hidden;
+    width: 53px;}
+.thumbs_wrap a:hover{border-color:#f8a411;}
+.thumbs_wrap a.active_thumb{border-color:#f8a411;}
+.open_gallery{display: none;right: 20px;top: 20px;}
+.view_img_wrap:hover .open_gallery{display: block;}
+
+.open_gallery span{background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 26px;
+    opacity: 0.8;
+    padding: 11px 16px;}
+.open_gallery span:hover{ opacity: 1;}
+.gallery_loading{left: 10px;
+    top: 10px;
+    z-index: 0;}
+.star{color: #f8a411;
+    font-size: 15px;
+    height: 15px;
+    width: 16px;}
+.star_wrap{ display: inline-block;
+    line-height: 12px;
+    margin-left: 10px;
+    transform: translateY(-22%);}
+h1, .h1 {
+    color: #6d4603;
+    font-family: roboto,sans-serif;
+    font-size: 30px;
+}
+.list_thumb{width:100px;}
+.item{overflow:hidden;}
+.hotel_list_box{ border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;}
+.hotel_list_title{font-size: 16px; font-weight:bold;}
+.list_star {
+    color: #f8a411;
+    font-size: 12px;
+    height: 12px;
+    width: 12px;
+}
+.list_city{}

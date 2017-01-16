@@ -15,12 +15,16 @@ $package_active='';
 $item_active='';
 $dest_active='';
 $user_active='';
+$hotel_active='';
+$city_active='';
 $controller=Yii::$app->controller->id;
 if($controller=='page') $pages_active="active";
 else if($controller=='package') $package_active="active";
 else if($controller=='item') $item_active="active";
 else if($controller=='destination') $dest_active="active";
 else if($controller=='user') $user_active="active";
+else if($controller=='hotel') $hotel_active="active";
+else if($controller=='city') $city_active="active";
 ?>
 <div class="admpanel_top">
       <div class="admpanel-title">
@@ -33,6 +37,8 @@ else if($controller=='user') $user_active="active";
                 <div class="<?=$package_active?>"><span class='panel-icon glyphicon glyphicon-tags'></span><?=Html::a('Packages', ['/package/index']); ?></div>
                 <div class="<?=$item_active?>"><span class='panel-icon glyphicon glyphicon-tag'></span><?=Html::a('Package Items', ['/item/index']); ?></div>
                 <div class="<?=$dest_active?>"><span class='panel-icon glyphicon glyphicon-globe'></span><?=Html::a('Destinations', ['/destination/index']); ?></div>
+                <div class="<?=$hotel_active?>"><span class='panel-icon glyphicon glyphicon-home'></span><?=Html::a('Hotels', ['/hotel/index']); ?></div>
+                <div class="<?=$city_active?>"><span class='panel-icon glyphicon glyphicon-map-marker'></span><?=Html::a('Cities', ['/city/index']); ?></div>
                 <div class="<?=$user_active?>"><span class='panel-icon glyphicon glyphicon-user'></span><?=Html::a('Users', ['/user/index']); ?></div>
              </div>
              <div class="clear"></div>
@@ -57,6 +63,9 @@ else if($controller=='user') $user_active="active";
                             echo Html::a('<span class="glyphicon glyphicon-tag panel-icon2"></span> Add item',
                                 ['/item/create', 'parent_id' => $id], ['class' => 'mr30']);
                         }
+                        else if($controller=='hotel'){
+                            echo Html::a('<span class="glyphicon glyphicon-bold"></span> Add hotel from link',['/hotel/grab'], ['class' => 'mr30']);
+                        }
                         ?>
                     </div>
                 <?php
@@ -67,8 +76,28 @@ else if($controller=='user') $user_active="active";
                     <div class="operations" style="padding: 4px 13px; background-color: #000;">
                         <?= Html::a('<span class="glyphicon glyphicon-list panel-icon2"></span> List', ['index'], ['class' => '','style'=>'margin-right:30px;']) ?>
                         <?= Html::a('<span class="glyphicon glyphicon-plus panel-icon2"></span> Create', ['create'], ['class' => '','style'=>'margin-right:30px;']) ?>
+                        <?php
+
+                        if($controller=='hotel'){
+                            echo Html::a('<span class="glyphicon glyphicon-bold"></span> Add hotel from link',['/hotel/grab'], ['class' => 'mr30']);
+                        }
+                        ?>
                     </div>
                 <?php
+                }
+                elseif(in_array($action,['create']))
+                {
+                    ?>
+                    <div class="operations" style="padding: 4px 13px; background-color: #000;">
+                        <?= Html::a('<span class="glyphicon glyphicon-list panel-icon2"></span> List', ['index'], ['class' => '','style'=>'margin-right:30px;']) ?>
+                        <?php
+
+                        if($controller=='hotel'){
+                            echo Html::a('<span class="glyphicon glyphicon-bold"></span> Add hotel from link',['/hotel/grab'], ['class' => 'mr30']);
+                        }
+                        ?>
+                    </div>
+                    <?php
                 }
                 ?>
          </div>

@@ -104,4 +104,18 @@ class CityController extends MyController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionCountryCities(){
+        $country_id=Yii::$app->request->post('country_id');
+        $cities = City::find()->where(['country_id' => $country_id])->all();
+
+        if($cities){
+            foreach($cities as $post){
+                echo "<option value='".$post->id."'>".$post->title."</option>";
+            }
+        }
+        else{
+            echo "<option>-</option>";
+        }
+    }
 }

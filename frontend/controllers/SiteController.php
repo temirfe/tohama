@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
+use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -13,6 +14,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\web\UploadedFile;
+use frontend\models\Hotel;
 
 /**
  * Site controller
@@ -27,7 +29,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup','upload-excel'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -38,6 +40,11 @@ class SiteController extends Controller
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['upload-excel'],
+                        'allow' => true,
+                        'roles' => ['admin'],
                     ],
                 ],
             ],
@@ -255,4 +262,245 @@ class SiteController extends Controller
         Yii::$app->response->format=\yii\web\Response::FORMAT_JSON;
         return true;
     }
+
+    public function actionUploadExcel(){
+        $time_start = microtime(true);
+        $error=false;
+        $req=Yii::$app->request;
+        if(!empty($_FILES['excel']['name']))
+        {
+            $data=[];
+            if(!$data['country_id']=$req->post('country')){$error='Please select country!';}
+            if(!$data['city_id']=$req->post('city')){$error='Please select city!';}
+            $data['stars']=$req->post('stars');
+            if(!$error){
+                $info = pathinfo($_FILES['excel']['name']);
+                $ext = $info['extension']; // get the extension of the file
+                $newname = time().".".$ext;
+
+                $target = 'upload/'.$newname;
+                move_uploaded_file( $_FILES['excel']['tmp_name'], $target);
+                $parsed_data=$this->parseExcel($newname,$data);
+                $time_end = microtime(true);
+                $execution_seconds=$time_end - $time_start;
+                return $this->render('excelresult',['data'=>$parsed_data,'time'=>$execution_seconds]);
+            }
+        }
+        else if($req->isPost){$error='No file was selected!';}
+
+        return $this->render('loadexcel',['error'=>$error]);
+    }
+
+    protected function parseExcel($filename,$data){
+        $dao=Yii::$app->db;
+        if($stars=$data['stars']){
+            $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}' AND stars='{$stars}'";
+        }
+        else{
+            $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}'";
+        }
+        $skus_rows = $dao->createCommand($skus_query)->queryAll();
+
+        $dir=Yii::getAlias('@webroot');
+        if(is_file($file=$dir.'/upload/'.$filename)){
+            $objReader =  \PHPExcel_IOFactory::createReaderForFile($file);
+            $objReader->setReadDataOnly(true);
+            $objPHPExcel=$objReader->load($file);
+            //$parse_result=$this->parseSingleSheet($objPHPExcel,$skus_rows);
+            $parse_result=$this->parseSheets($objPHPExcel, $skus_rows);
+            $this->saveResult($parse_result,$data);
+            return $parse_result;
+
+        }
+        else return 'not a valid file';
+    }
+
+    protected function saveResult($result,$data){
+        $batch_row=[];
+        foreach($result as $sheet_title=>$sheet_array){
+            if($sheet_array['found']){
+                foreach($sheet_array['rows'] as $sheet_row){
+                    if(strtolower($sheet_row[0])!='room type'){
+                        $sheet_row[12]=$sheet_array['hotel_id'];
+                        $sheet_row[13]=$data['country_id'];
+                        $sheet_row[14]=$data['city_id'];
+                        $batch_row[]=$sheet_row;
+                    }
+                }
+            }
+        }
+        Yii::$app->db->createCommand()->batchInsert('roomprice',
+            ['room','season','meal_plan','date_from','date_to','sgl_room','dbl_person','third_pax','adult_hb','child_bb','child_eb','child_hb','hotel_id', 'country_id','city_id'],
+            $batch_row
+        )->execute();
+    }
+
+    protected function parseSingleSheet($objPHPExcel, $skus_rows){
+        $sheets = [];
+        //$skus=ArrayHelper::map($skus_rows,'id','title');
+        //$hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
+        $objPHPExcel->setActiveSheetIndex(2);
+        $objWorksheet = $objPHPExcel->getActiveSheet();
+        $sheet_title=$objWorksheet->getTitle();
+        $arrows=$objWorksheet->toArray();
+        $sheets[$sheet_title]['found']=true;
+        $sheets[$sheet_title]['hotel_id']=4;
+        $sheets[$sheet_title]['rows']=$this->getRows($arrows);
+        return $sheets;
+    }
+
+    protected function parseSheets($objPHPExcel,$skus_rows){
+        $sheets = [];
+        $skus=ArrayHelper::map($skus_rows,'id','title');
+        $hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
+        foreach ($objPHPExcel->getAllSheets() as $sheet) {
+            $sheet_title=$sheet->getTitle();
+            if($sku_id=array_search($sheet_title, $skus)){
+                $sheets[$sheet_title]['found']=true;
+                $sheets[$sheet_title]['hotel_id']=$hotel_ids[$sku_id];
+                $arrows=$sheet->toArray();
+                $sheets[$sheet_title]['rows']=$this->getRows($arrows);
+            }
+            else {
+                $sheets[$sheet_title]['found']=false;
+            }
+        }
+        return $sheets;
+    }
+
+    protected function getRows($arrows){
+        $start=false;
+        $room_type='';
+        $quality_rows=[];
+        foreach($arrows as $arrow){
+            if(!$start){if($arrow[0]=='Room Type'){$start=true;}}
+            if($start && !empty($arrow[1]) && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
+                if($arrow[0]){$room_type=$arrow[0];}
+
+                if(strtolower($arrow[3])!='from'){$date_from=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[3])); }
+                else{$date_from=$arrow[3];}
+                if(strtolower($arrow[4])!='to'){$date_to=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[4])); }
+                else{$date_to=$arrow[4];}
+
+                $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$arrow[6],$arrow[7],$arrow[8],$arrow[9],$arrow[10],$arrow[11]];
+            }
+        }
+        return $quality_rows;
+    }
+
+    protected function parseExcel2($filename,$data){
+        $dir=Yii::getAlias('@webroot');
+        if(is_file($file=$dir.'/upload/'.$filename)){
+            $objReader =  \PHPExcel_IOFactory::createReaderForFile($file);
+            $objReader->setReadDataOnly(true);
+            $objPHPExcel=$objReader->load($file);
+            //$objWorksheet = $objPHPExcel->getActiveSheet();
+
+            $objPHPExcel->setActiveSheetIndex(2);
+            $objWorksheet = $objPHPExcel->getActiveSheet();
+            $arrows=$objWorksheet->toArray();
+
+            /*echo "<pre>";
+            print_r($sheetArray);
+            echo "</pre>";*/
+
+            $start=false;
+            $room_type='';
+            $quality_rows=[];
+            foreach($arrows as $arrow){
+                if(!$start){if($arrow[0]=='Room Type'){$start=true;}}
+                if($start && !empty($arrow[1]) && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
+                    if($arrow[0]){$room_type=$arrow[0];}
+
+                    if(strtolower($arrow[3])!='from'){$date_from=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[3])); }
+                    else{$date_from=$arrow[3];}
+                    if(strtolower($arrow[4])!='to'){$date_to=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[4])); }
+                    else{$date_to=$arrow[4];}
+
+                    $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$arrow[6],$arrow[7],$arrow[8],$arrow[9],$arrow[10],$arrow[11]];
+                }
+            }
+            echo "<pre>";
+            print_r($quality_rows);
+            echo "</pre>";
+
+            $sheets = [];
+            /*foreach ($objPHPExcel->getAllSheets() as $sheet) {
+                echo $sheet->getTitle()."<br />";
+                //$sheets[$sheet->getTitle()] = $sheet->toArray();
+            }*/
+
+            /*$highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+            $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+            $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+
+            for ($row = 1; $row <= $highestRow; ++$row)
+            {
+                for ($col = 0; $col <= $highestColumnIndex; ++$col) {
+                    $curval=$objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
+                    $curval=preg_replace('/\s+/S', " ", $curval);
+                    echo $curval.'----';
+                }
+                echo "<br />";
+            }*/
+        }
+        else echo 'not a valid file';
+    }
+
+    public function actionTest(){
+       /* $dao=Yii::$app->db;
+        $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='234' AND city_id='1' AND stars='5'";
+
+        $skus_rows = $dao->createCommand($skus_query)->queryAll();
+        $skus=ArrayHelper::map($skus_rows,'id','title');
+        $skus2=ArrayHelper::map($skus_rows,'id','hotel_id');
+        echo "<pre>";
+        print_r($skus);
+        echo "/<pre>";
+
+        echo "<pre>";
+        print_r($skus2);
+        echo "/<pre>";*/
+
+        $date_from=Yii::$app->request->get('date_from');
+        $date_from=date('Y-m-d',strtotime($date_from));
+        $date_to=Yii::$app->request->get('date_to');
+        $date_to=date('Y-m-d',strtotime($date_to));
+        $dao=Yii::$app->db;
+        //$skus_query = "SELECT id,date_from, date_to,hotel_id FROM roomprice WHERE hotel_id='4' AND date_from>'{$date_from}'";
+        //$skus_query = "SELECT id,date_from, date_to,hotel_id FROM roomprice WHERE hotel_id='4' AND date_to<='{$date_to}'";
+        $skus_query = "SELECT id,date_from, date_to,hotel_id FROM roomprice 
+                        WHERE hotel_id='4' 
+                        AND room='Classic Room'
+                        AND ((date_from<='{$date_from}' AND date_to>='{$date_from}') OR (date_from<='{$date_to}' AND date_to>='{$date_to}'))";
+        //http://tohama.loc/site/test?date_from=27+Jan+2016?date_to=30+Jan+2016
+        $skus_rows = $dao->createCommand($skus_query)->queryAll();
+        echo "<pre>";
+        print_r($skus_rows);
+        echo "</pre>";
+
+    }
+
+    public function actionRun(){
+        $stay_start='2016-01-27';
+        $stay_end='2016-01-30';
+        $stay_times=[];
+        for($i=strtotime($stay_start);$i<=strtotime($stay_end);$i+=86400){
+            //echo date('Y-m-d',$i)."<br />";
+            $stay_times[]=$i;
+        }
+
+        echo "<br />";
+        $start='2016-01-24';
+        $end='2016-01-28';
+        //echo strtotime($start).' '.strtotime($end);
+        for($i=strtotime($start);$i<=strtotime($end);$i+=86400){
+            //echo date('Y-m-d',$i)."<br />";
+            if(in_array($i,$stay_times)){
+                echo "yo<br />";
+            }
+        }
+    }
+
+
 }

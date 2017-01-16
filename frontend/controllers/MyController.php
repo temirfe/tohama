@@ -43,15 +43,10 @@ class MyController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only'=>['create','update','delete','index','view'],
+                'only'=>['create','update','delete','index','view','grab'],
                 'rules' => [
                     [
-                        'actions' => ['create','update','delete'],
-                        'allow' => true,
-                        'roles' => ['crud'],
-                    ],
-                    [
-                        'actions' => ['index'],
+                        'actions' => ['create','update','delete','grab','index'],
                         'allow' => true,
                         'roles' => ['crud'],
                     ],

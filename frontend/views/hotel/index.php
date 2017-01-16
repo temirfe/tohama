@@ -10,19 +10,20 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('app', 'Hotels');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php echo $this->render('_search', ['model' => $searchModel]); ?>
+
 <div class="hotel-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Hotel'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<?php Pjax::begin(); ?>    <?= ListView::widget([
+    <?php Pjax::begin(); ?>
+    <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'itemOptions' => ['class' => 'item'],
+        'itemOptions' => ['class' => 'item box hotel_list_box'],
         'itemView' => function ($model, $key, $index, $widget) {
-            return Html::a(Html::encode($model->title), ['view', 'id' => $model->id]);
+            return $this->render('_list',['model' => $model]);
         },
+        'summary'=>''
     ]) ?>
-<?php Pjax::end(); ?></div>
+    <?php Pjax::end(); ?>
+</div>
