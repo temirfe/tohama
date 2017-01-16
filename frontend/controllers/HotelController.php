@@ -361,9 +361,9 @@ class HotelController extends MyController
     protected function getSource($url){
 
         $dao=Yii::$app->db;
-        $dbody = $dao->cache(function($dao) use($url) {
+        /*$dbody = $dao->cache(function($dao) use($url) {
             return $dao->createCommand("SELECT * FROM ferrum WHERE url='{$url}'")->queryOne();
-        }, 3600);
+        }, 3600);*/
 
         if(!empty($dbody['id'])){
             $result=$dbody['text'];
@@ -383,10 +383,10 @@ class HotelController extends MyController
             $result = curl_exec($ch); // run the whole process
             curl_close($ch);
 
-            $dao->createCommand()->insert('ferrum', [
+            /*$dao->createCommand()->insert('ferrum', [
                 'text' => $result,
                 'url' => $url,
-            ])->execute();
+            ])->execute();*/
         }
 
         return $result;

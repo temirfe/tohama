@@ -505,3 +505,7 @@ h1, .h1 {
     width: 12px;
 }
 .list_city{}
+.oh{
+    overflow: hidden;}
+.bold{
+    font-weight:bold;}

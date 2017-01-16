@@ -12,6 +12,17 @@ else if($model->image){
 }
 else $img="<div class='no_img text-center'>".Html::img("/images/tohama_logo_300px.png",['class'=>'slider'])."</div>";
 $imglink=Html::a($img,['/hotel/view','id'=>$model->id],['class'=>'list_thumb rel']);
+
+$get=Yii::$app->request->get('HotelSearch');
+$for='';
+if($get['date_from'] && $get['date_to']){
+    $time_end=strtotime($get['date_to']);
+    $time_start=strtotime($get['date_from']);
+    $datediff=$time_end-$time_start;
+    $night=floor($datediff / (60 * 60 * 24));
+    if($night>1){$s='s';}else{$s='';}
+    $for="Price for {$night} night{$s}";
+}
 ?>
 
 <div class='pull-left article-thumb mr20'>
@@ -57,9 +68,19 @@ $imglink=Html::a($img,['/hotel/view','id'=>$model->id],['class'=>'list_thumb rel
                     }
                 }
                 if($room){
-                    foreach($room as $r){
-                        echo $r['name'].' '.$r['meal_plan'].' '.$r['price']."<br />";
-                    }
+                    ?>
+                    <table class="table">
+                        <?php
+                        foreach($room as $r){
+                            $book=Html::a("Book",['book/create', 'room'=>$r['name'],
+                                'price'=>$r['price'], 'price_for_nights'=>$for, 'hotel_id'=>$model->id, 'other'=>'',
+                                'date_from'=>$stay_start, 'date_to'=>$stay_end]);
+                            echo "<tr><td>".$r['name'].'</td><td>'.$r['meal_plan'].'</td><td>On Request</td><td>'.$for.' US$'.$r['price']."</td><td>".$book."</td></tr>";
+                        }
+                        ?>
+                    </table>
+
+        <?php
                 }
 
             }

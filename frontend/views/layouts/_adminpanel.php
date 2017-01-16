@@ -17,6 +17,8 @@ $dest_active='';
 $user_active='';
 $hotel_active='';
 $city_active='';
+$excel_active='';
+$book_active='';
 $controller=Yii::$app->controller->id;
 if($controller=='page') $pages_active="active";
 else if($controller=='package') $package_active="active";
@@ -25,6 +27,8 @@ else if($controller=='destination') $dest_active="active";
 else if($controller=='user') $user_active="active";
 else if($controller=='hotel') $hotel_active="active";
 else if($controller=='city') $city_active="active";
+else if($controller=='book') $book_active="active";
+else if($controller=='site' && Yii::$app->controller->action->id=='upload-excel') $excel_active="active";
 ?>
 <div class="admpanel_top">
       <div class="admpanel-title">
@@ -40,6 +44,8 @@ else if($controller=='city') $city_active="active";
                 <div class="<?=$hotel_active?>"><span class='panel-icon glyphicon glyphicon-home'></span><?=Html::a('Hotels', ['/hotel/index']); ?></div>
                 <div class="<?=$city_active?>"><span class='panel-icon glyphicon glyphicon-map-marker'></span><?=Html::a('Cities', ['/city/index']); ?></div>
                 <div class="<?=$user_active?>"><span class='panel-icon glyphicon glyphicon-user'></span><?=Html::a('Users', ['/user/index']); ?></div>
+                <div class="<?=$book_active?>"><span class='panel-icon glyphicon glyphicon-credit-card'></span><?=Html::a('Bookings', ['/book/index']); ?></div>
+                <div class="<?=$excel_active?>"><span class='panel-icon glyphicon glyphicon-file'></span><?=Html::a('Upload excel', ['/site/upload-excel']); ?></div>
              </div>
              <div class="clear"></div>
                 <?php
