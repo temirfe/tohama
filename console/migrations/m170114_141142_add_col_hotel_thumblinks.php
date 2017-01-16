@@ -2,17 +2,17 @@
 
 use yii\db\Migration;
 
-class m170107_174430_addcols_hotel_2 extends Migration
+class m170114_141142_add_col_hotel_thumblinks extends Migration
 {
     public function up()
     {
-        $this->addColumn('hotel','thumb','varchar(255) NOT NULL');
-        $this->addColumn('hotel','imglinks','text NOT NULL');
+
+        $this->addColumn('hotel','thumblinks','text NOT NULL');
     }
 
     public function down()
     {
-        echo "m170107_174430_addcols_hotel_2 cannot be reverted.\n";
+        echo "m170114_141142_add_col_hotel_thumblinks cannot be reverted.\n";
 
         return false;
     }

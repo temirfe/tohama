@@ -24,12 +24,24 @@ use yii\helpers\ArrayHelper;
  * @property string $thumb
  * @property string $thumbs_sprite
  * @property string $imglinks
+ * @property string $thumblinks
  * @property array $skuitem
  * @property integer $stars
+ * 
+ * @property integer $nationality_id
+ * @property string $date_from
+ * @property string $date_to
+ *
+ *  @property Country $country
+ *  @property City $city
+ *  @property Roomprice $prices
  */
 class Hotel extends MyModel
 {
     public $skuitem=[];
+    public $nationality_id;
+    public $date_from;
+    public $date_to;
     /**
      * @inheritdoc
      */
@@ -53,7 +65,7 @@ class Hotel extends MyModel
             [['address', 'image'], 'string', 'max' => 255],
             [['latlong'], 'string', 'max' => 200],
             [['sku'], 'string', 'max' => 1000],
-            [['skuitem','location','website','phone','thumb','thumbs_sprite','imglinks'], 'safe'],
+            [['skuitem','location','website','phone','thumb','thumbs_sprite','imglinks','thumblink'], 'safe'],
         ];
 
         return ArrayHelper::merge(parent::rules(),$rules);
@@ -69,6 +81,7 @@ class Hotel extends MyModel
             'title' => Yii::t('app', 'Title'),
             'text' => Yii::t('app', 'Text'),
             'country_id' => Yii::t('app', 'Country'),
+            'nationality_id' => Yii::t('app', 'Nationality'),
             'city_id' => Yii::t('app', 'City'),
             'neighborhood' => Yii::t('app', 'Neighborhood'),
             'address' => Yii::t('app', 'Address'),
@@ -96,6 +109,16 @@ class Hotel extends MyModel
             }
 
             $this->text=preg_replace("/<a.*?>.*?<\/a>/i",'', $this->text);
+
+
+            $dao=Yii::$app->db;
+            $co = $dao->createCommand("SELECT id FROM existing_countries WHERE country_id='{$this->country_id}'")->queryOne();
+            if(!$co){
+                $dao->createCommand()->insert('existing_countries', [
+                    'title' => $this->country->title,
+                    'country_id' => $this->country_id,
+                ])->execute();
+            }
             return true;
         } else {
             return false;
@@ -166,6 +189,22 @@ class Hotel extends MyModel
             if($country_id=array_search($loc['country'],$countries)){$this->country_id=$country_id;}
             if(!empty($loc['sublocality'])){$this->neighborhood=$loc['sublocality'];}
         }
+    }
+
+    public function getCountry()
+    {
+        return $this->hasOne(Country::className(), ['id' => 'country_id']);
+    }
+
+    public function getCity()
+    {
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
+    }
+
+    public function getPrices()
+    {
+        return $this->hasMany(Roomprice::className(), ['hotel_id' => 'id']);
+        //->where('date_from > :df', [':df' => $this->date_from])
     }
 
 }

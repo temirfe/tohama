@@ -19,7 +19,7 @@ class HotelSearch extends Hotel
     {
         return [
             [['id', 'country_id', 'city_id', 'stars'], 'integer'],
-            [['title', 'text', 'neighborhood', 'address', 'image', 'latlong', 'sku'], 'safe'],
+            [['title', 'text', 'neighborhood', 'address', 'image', 'latlong', 'sku','date_from','date_to'], 'safe'],
         ];
     }
 
@@ -47,6 +47,8 @@ class HotelSearch extends Hotel
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]],
+            'pagination'=>['pageSize'=>50]
         ]);
 
         $this->load($params);
@@ -72,6 +74,16 @@ class HotelSearch extends Hotel
             ->andFilterWhere(['like', 'image', $this->image])
             ->andFilterWhere(['like', 'latlong', $this->latlong])
             ->andFilterWhere(['like', 'sku', $this->sku]);
+
+        if($this->date_from && $this->date_to){
+            $date_from=date('Y-m-d',strtotime($this->date_from));
+            $date_to=date('Y-m-d',strtotime($this->date_to));
+            $query->with([
+                'prices' => function ($q) use($date_from,$date_to) {
+                    $q->andWhere("(date_from<='{$date_from}' AND date_to>='{$date_from}') OR (date_from<='{$date_to}' AND date_to>='{$date_to}')");
+                },
+            ]);
+        }
 
         return $dataProvider;
     }

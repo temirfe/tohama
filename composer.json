@@ -25,7 +25,8 @@
         "iutbay/yii2-kcfinder": "dev-master",
         "newerton/yii2-fancybox": "dev-master",
         "phpoffice/phpexcel": "dev-master",
-        "coderockr/php-query": "dev-master"
+        "coderockr/php-query": "dev-master",
+        "kartik-v/yii2-widget-datepicker": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

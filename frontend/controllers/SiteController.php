@@ -448,7 +448,7 @@ class SiteController extends Controller
     }
 
     public function actionTest(){
-        $dao=Yii::$app->db;
+       /* $dao=Yii::$app->db;
         $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='234' AND city_id='1' AND stars='5'";
 
         $skus_rows = $dao->createCommand($skus_query)->queryAll();
@@ -460,7 +460,46 @@ class SiteController extends Controller
 
         echo "<pre>";
         print_r($skus2);
-        echo "/<pre>";
+        echo "/<pre>";*/
+
+        $date_from=Yii::$app->request->get('date_from');
+        $date_from=date('Y-m-d',strtotime($date_from));
+        $date_to=Yii::$app->request->get('date_to');
+        $date_to=date('Y-m-d',strtotime($date_to));
+        $dao=Yii::$app->db;
+        //$skus_query = "SELECT id,date_from, date_to,hotel_id FROM roomprice WHERE hotel_id='4' AND date_from>'{$date_from}'";
+        //$skus_query = "SELECT id,date_from, date_to,hotel_id FROM roomprice WHERE hotel_id='4' AND date_to<='{$date_to}'";
+        $skus_query = "SELECT id,date_from, date_to,hotel_id FROM roomprice 
+                        WHERE hotel_id='4' 
+                        AND room='Classic Room'
+                        AND ((date_from<='{$date_from}' AND date_to>='{$date_from}') OR (date_from<='{$date_to}' AND date_to>='{$date_to}'))";
+        //http://tohama.loc/site/test?date_from=27+Jan+2016?date_to=30+Jan+2016
+        $skus_rows = $dao->createCommand($skus_query)->queryAll();
+        echo "<pre>";
+        print_r($skus_rows);
+        echo "</pre>";
+
+    }
+
+    public function actionRun(){
+        $stay_start='2016-01-27';
+        $stay_end='2016-01-30';
+        $stay_times=[];
+        for($i=strtotime($stay_start);$i<=strtotime($stay_end);$i+=86400){
+            //echo date('Y-m-d',$i)."<br />";
+            $stay_times[]=$i;
+        }
+
+        echo "<br />";
+        $start='2016-01-24';
+        $end='2016-01-28';
+        //echo strtotime($start).' '.strtotime($end);
+        for($i=strtotime($start);$i<=strtotime($end);$i+=86400){
+            //echo date('Y-m-d',$i)."<br />";
+            if(in_array($i,$stay_times)){
+                echo "yo<br />";
+            }
+        }
     }
 
 
