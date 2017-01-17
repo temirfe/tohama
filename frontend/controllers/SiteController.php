@@ -72,6 +72,9 @@ class SiteController extends Controller
             ],
         ];
     }
+    public function actionPinfo(){
+        echo phpinfo();
+    }
 
     public function actionEditorUpload(){
         $file=UploadedFile::getInstanceByName('upload');
@@ -307,9 +310,10 @@ class SiteController extends Controller
             $objReader->setReadDataOnly(true);
             $objPHPExcel=$objReader->load($file);
             //$parse_result=$this->parseSingleSheet($objPHPExcel,$skus_rows);
-            $parse_result=$this->parseSheets($objPHPExcel, $skus_rows);
-            $this->saveResult($parse_result,$data);
-            return $parse_result;
+            //$parse_result=$this->parseSheets($objPHPExcel, $skus_rows);
+            //$this->saveResult($parse_result,$data);
+           // return $parse_result;
+            return false;
 
         }
         else return 'not a valid file';

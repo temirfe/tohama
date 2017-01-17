@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hotels'), 'url' => [
 $this->params['breadcrumbs'][] = $this->title;
 if($model->imglinks){$imglinks=explode(',',$model->imglinks);}
 if($model->thumblinks){$thumblinks=explode(',',$model->thumblinks);}
-$webroot=Yii::getAlias('@web');
+$webroot=Yii::getAlias('@webroot');
 $img_forlder=$webroot.'/images/hotel'.$model->id;
 include_once($webroot.'/photoswipe/_swipe.php');
 ?>
