@@ -345,11 +345,18 @@ class SiteController extends Controller
                 if($arrow[0]){$room_type=$arrow[0];}
 
                 if(is_object($arrow[3])){$fromDateObj=$arrow[3]; $date_from=$fromDateObj->format('Y-m-d');}
-                else $date_from=$arrow[3];
+                else $date_from=$arrow[3]; //
                 if(is_object($arrow[4])){$toDateObj=$arrow[4]; $date_to=$toDateObj->format('Y-m-d');}
                 else $date_to=$arrow[4];//it's column label: "To";
 
-                $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$arrow[6],$arrow[7],$arrow[8],$arrow[9],$arrow[10],$arrow[11]];
+                if(isset($arrow[6]))$row6=$arrow[6]; else $row6='';
+                if(isset($arrow[7]))$row7=$arrow[7]; else $row7='';
+                if(isset($arrow[8]))$row8=$arrow[8]; else $row8='';
+                if(isset($arrow[9]))$row9=$arrow[9]; else $row9='';
+                if(isset($arrow[10]))$row10=$arrow[10]; else $row10='';
+                if(isset($arrow[11]))$row11=$arrow[11]; else $row11='';
+
+                $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$row6,$row7,$row8,$row9,$row10,$row11];
             }
         }
         return $quality_rows;
