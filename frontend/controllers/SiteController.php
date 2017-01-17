@@ -15,6 +15,7 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\web\UploadedFile;
 use frontend\models\Hotel;
+use Akeneo\Component\SpreadsheetParser\SpreadsheetParser;
 
 /**
  * Site controller
@@ -283,7 +284,8 @@ class SiteController extends Controller
 
                 $target = 'upload/'.$newname;
                 move_uploaded_file( $_FILES['excel']['tmp_name'], $target);
-                $parsed_data=$this->parseExcel($newname,$data);
+                //$parsed_data=$this->parseExcel($newname,$data);
+                $parsed_data=$this->parseAkeneoExcel($newname,$data);
                 $time_end = microtime(true);
                 $execution_seconds=$time_end - $time_start;
                 return $this->render('excelresult',['data'=>$parsed_data,'time'=>$execution_seconds]);
@@ -292,6 +294,65 @@ class SiteController extends Controller
         else if($req->isPost){$error='No file was selected!';}
 
         return $this->render('loadexcel',['error'=>$error]);
+    }
+
+    protected function parseAkeneoExcel($filename,$data){
+        $dao=Yii::$app->db;
+        if($stars=$data['stars']){
+            $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}' AND stars='{$stars}'";
+        }
+        else{
+            $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}'";
+        }
+        $skus_rows = $dao->createCommand($skus_query)->queryAll();
+
+        $dir=Yii::getAlias('@webroot');
+        $file=$dir.'/upload/'.$filename;
+        $workbook = SpreadsheetParser::open($file);
+        $parse_result=$this->parseSheets2($workbook,$skus_rows);
+        $this->saveResult($parse_result,$data);
+        return $parse_result;
+    }
+
+    protected function parseSheets2($workbook,$skus_rows){
+        $worksheets=$workbook->getWorksheets();
+
+        $sheets = [];
+        $skus=ArrayHelper::map($skus_rows,'id','title');
+        $hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
+        foreach($worksheets as $sheet_title){
+            if($sku_id=array_search($sheet_title, $skus)){
+                $sheets[$sheet_title]['found']=true;
+                $sheets[$sheet_title]['hotel_id']=$hotel_ids[$sku_id];
+                $myWorksheetIndex = $workbook->getWorksheetIndex($sheet_title);
+                $arrows=$workbook->createRowIterator($myWorksheetIndex);
+                $sheets[$sheet_title]['rows']=$this->getRows2($arrows);
+            }
+            else {
+                $sheets[$sheet_title]['found']=false;
+            }
+        }
+        return $sheets;
+    }
+
+    protected function getRows2($arrows){
+        $start=false;
+        $room_type='';
+        $quality_rows=[];
+        foreach ($arrows as $rowIndex => $arrow) {
+            if(!$start){if(trim(strtolower($arrow[0]))=='room type'){$start=true;}}
+            if($start && !empty($arrow[1]) && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
+                if($arrow[0]){$room_type=$arrow[0];}
+
+                if(is_object($arrow[3])){$fromDateObj=$arrow[3]; $date_from=$fromDateObj->format('Y-m-d');}
+                else $date_from=$arrow[3];
+                if(is_object($arrow[4])){$toDateObj=$arrow[4]; $date_to=$toDateObj->format('Y-m-d');}
+                else $date_to=$arrow[4];//it's column label: "To";
+
+                $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$arrow[6],$arrow[7],$arrow[8],$arrow[9],$arrow[10],$arrow[11]];
+            }
+        }
+        return $quality_rows;
     }
 
     protected function parseExcel($filename,$data){

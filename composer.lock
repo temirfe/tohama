@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e0a1c031a37abd43b51421d6cfac755b",
-    "content-hash": "629fe3b952f4df296da229e5909cfc64",
+    "hash": "1cb46f370672d2004e31f2f77a15ac64",
+    "content-hash": "c322ce141b610a0a4b7c8af18cdf23f5",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -66,6 +66,70 @@
                 "yii2"
             ],
             "time": "2016-09-21 09:50:22"
+        },
+        {
+            "name": "akeneo-labs/spreadsheet-parser",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akeneo-labs/spreadsheet-parser.git",
+                "reference": "3219be64cad3edee26f98133c53fc475207df0a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/akeneo-labs/spreadsheet-parser/zipball/3219be64cad3edee26f98133c53fc475207df0a3",
+                "reference": "3219be64cad3edee26f98133c53fc475207df0a3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "symfony/options-resolver": "~2.6 || ~3.0"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Akeneo\\Component\\SpreadsheetParser\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Antoine Guigan",
+                    "email": "antoine@akeneo.com",
+                    "homepage": "http://akeneo.com"
+                },
+                {
+                    "name": "Matthieu Viel",
+                    "email": "matthieu.viel@akeneo.com",
+                    "homepage": "http://akeneo.com"
+                },
+                {
+                    "name": "JM Leroux",
+                    "email": "jean-marie.leroux@akeneo.com"
+                }
+            ],
+            "description": "Akeneo Spreadsheet parser. Reads XLXS files from Microsoft Excel and Open Office",
+            "homepage": "http://akeneo.com",
+            "keywords": [
+                "akeneo",
+                "excel",
+                "parser",
+                "reader",
+                "spreadsheet",
+                "xlsx"
+            ],
+            "time": "2016-09-12 14:57:57"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -1097,6 +1161,60 @@
                 "mailer"
             ],
             "time": "2016-12-29 10:02:40"
+        },
+        {
+            "name": "symfony/options-resolver",
+            "version": "v2.8.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/options-resolver.git",
+                "reference": "cc343e8e30e0e9785a0871196af722665d8b970e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/cc343e8e30e0e9785a0871196af722665d8b970e",
+                "reference": "cc343e8e30e0e9785a0871196af722665d8b970e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\OptionsResolver\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony OptionsResolver Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "config",
+                "configuration",
+                "options"
+            ],
+            "time": "2017-01-02 20:30:24"
         },
         {
             "name": "yiisoft/yii2",

@@ -9,23 +9,25 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 $name="Excel Upload Result";
 $this->title = $name.' - Tohama Travel & Tourism LLC';
-
-
 ?>
 <div class="site-data">
 
     <h1><?= Html::encode($name) ?></h1>
 
+    <table class="table table-striped" style="width:auto;">
+        <tr><th>Worksheet name (Hotel SKU)</th><th>Status</th></tr>
     <?php
     foreach($data as $sheet_title=>$sheet_array){
         if($sheet_array['found']){
-            echo $sheet_title."<br />";
+            echo "<tr><td>".$sheet_title."</td><td><span class='green'>saved</span></td></tr>";
             /*foreach($sheet_array['rows'] as $sheet_rows){
                 echo "<pre>";
                 print_r($sheet_rows);
                 echo "</pre>";
             }*/
-            echo "<br />";
+        }
+        else{
+            echo "<tr><td>".$sheet_title."</td><td><span class='red'>not found</span></td></tr>";
         }
     }
     /*if(is_array($data)){
@@ -43,6 +45,10 @@ $this->title = $name.' - Tohama Travel & Tourism LLC';
         }
     }
     else echo $data;*/
+    ?>
+
+    </table>
+        <?php
 
     $execution_minutes=$time/60;
 
