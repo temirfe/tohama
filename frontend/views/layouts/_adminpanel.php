@@ -19,6 +19,8 @@ $hotel_active='';
 $city_active='';
 $excel_active='';
 $book_active='';
+$price_active='';
+$banner_active='';
 $controller=Yii::$app->controller->id;
 if($controller=='page') $pages_active="active";
 else if($controller=='package') $package_active="active";
@@ -28,6 +30,8 @@ else if($controller=='user') $user_active="active";
 else if($controller=='hotel') $hotel_active="active";
 else if($controller=='city') $city_active="active";
 else if($controller=='book') $book_active="active";
+else if($controller=='roomprice') $price_active="active";
+else if($controller=='banner') $banner_active="active";
 else if($controller=='site' && Yii::$app->controller->action->id=='upload-excel') $excel_active="active";
 ?>
 <div class="admpanel_top">
@@ -41,11 +45,13 @@ else if($controller=='site' && Yii::$app->controller->action->id=='upload-excel'
                 <div class="<?=$package_active?>"><span class='panel-icon glyphicon glyphicon-tags'></span><?=Html::a('Packages', ['/package/index']); ?></div>
                 <div class="<?=$item_active?>"><span class='panel-icon glyphicon glyphicon-tag'></span><?=Html::a('Package Items', ['/item/index']); ?></div>
                 <div class="<?=$dest_active?>"><span class='panel-icon glyphicon glyphicon-globe'></span><?=Html::a('Destinations', ['/destination/index']); ?></div>
-                <div class="<?=$hotel_active?>"><span class='panel-icon glyphicon glyphicon-home'></span><?=Html::a('Hotels', ['/hotel/index']); ?></div>
                 <div class="<?=$city_active?>"><span class='panel-icon glyphicon glyphicon-map-marker'></span><?=Html::a('Cities', ['/city/index']); ?></div>
-                <div class="<?=$user_active?>"><span class='panel-icon glyphicon glyphicon-user'></span><?=Html::a('Users', ['/user/index']); ?></div>
+                <div class="<?=$hotel_active?>"><span class='panel-icon glyphicon glyphicon-home'></span><?=Html::a('Hotels', ['/hotel/index']); ?></div>
                 <div class="<?=$book_active?>"><span class='panel-icon glyphicon glyphicon-credit-card'></span><?=Html::a('Bookings', ['/book/index']); ?></div>
                 <div class="<?=$excel_active?>"><span class='panel-icon glyphicon glyphicon-file'></span><?=Html::a('Upload excel', ['/site/upload-excel']); ?></div>
+                <div class="<?=$price_active?>"><span class='panel-icon glyphicon glyphicon-barcode'></span><?=Html::a('Hotel prices', ['/roomprice/index']); ?></div>
+                <div class="<?=$banner_active?>"><span class='panel-icon glyphicon glyphicon-picture'></span><?=Html::a('Banner', ['/banner/index']); ?></div>
+                <div class="<?=$user_active?>"><span class='panel-icon glyphicon glyphicon-user'></span><?=Html::a('Users', ['/user/index']); ?></div>
              </div>
              <div class="clear"></div>
                 <?php

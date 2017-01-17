@@ -3,6 +3,8 @@
 /* @var $this yii\web\View */
 use yii\helpers\Html;
 $this->title = 'Tohama Travel & Tourism';
+if(!isset($dao)) $dao=Yii::$app->db;
+$banner = $dao->createCommand("SELECT * FROM banner ORDER BY id DESC")->queryOne();
 ?>
 <style type="text/css">
     .logo_wrap_index {
@@ -15,11 +17,11 @@ $this->title = 'Tohama Travel & Tourism';
     .wrap > .container {
         padding-top:0;
     }
+    .slider{background:rgba(0, 0, 0, 0) url("/images/banner/<?=$banner['id']?>/<?=$banner['image']?>") no-repeat scroll 0 center / 100% auto;}
 </style>
 <div class="site-index">
 
     <div class="body-content">
-
         <h3>Special offers</h3>
         <div class="row">
             <?php

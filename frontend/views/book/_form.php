@@ -28,8 +28,11 @@ $role=Yii::$app->user->identity->role;
             <?=Html::a($hotel->title,['/hotel/view','id'=>$hotel->id],['class'=>'hotel_list_title blue no_underline']); ?>
             <?php
             if($hotel->stars){
-                for($i=0;$i<$hotel->stars; $i++){
-                    echo "<span class='glyphicon glyphicon-star list_star'></span>";
+                if($model->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
+                else{
+                    for($i=0;$i<$hotel->stars; $i++){
+                        echo "<span class='glyphicon glyphicon-star list_star'></span>";
+                    }
                 }
             }
             ?>

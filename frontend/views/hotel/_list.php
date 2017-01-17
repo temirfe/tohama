@@ -34,8 +34,11 @@ if($get['date_from'] && $get['date_to']){
         <?=Html::a($model->title,['/hotel/view','id'=>$model->id],['class'=>'hotel_list_title blue no_underline']); ?>
         <?php
         if($model->stars){
-            for($i=0;$i<$model->stars; $i++){
-                echo "<span class='glyphicon glyphicon-star list_star'></span>";
+            if($model->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
+            else{
+                for($i=0;$i<$model->stars; $i++){
+                    echo "<span class='glyphicon glyphicon-star list_star'></span>";
+                }
             }
         }
         ?>
@@ -69,16 +72,28 @@ if($get['date_from'] && $get['date_to']){
                 }
                 if($room){
                     ?>
-                    <table class="table">
+                    <table class="table book-table mb0 js_tbl_<?=$model->id?>">
                         <?php
+                        $i=0;
                         foreach($room as $r){
+                            if($i!=0){$additional_book_row='js_book_row_additional hiddeniraak';}else{$additional_book_row='';}
                             $book=Html::a("Book",['book/create', 'room'=>$r['name'],
                                 'price'=>$r['price'], 'price_for_nights'=>$for, 'hotel_id'=>$model->id, 'other'=>'',
-                                'date_from'=>$stay_start, 'date_to'=>$stay_end]);
-                            echo "<tr><td>".$r['name'].'</td><td>'.$r['meal_plan'].'</td><td>On Request</td><td>'.$for.' US$'.$r['price']."</td><td>".$book."</td></tr>";
+                                'date_from'=>$stay_start, 'date_to'=>$stay_end],['class'=>'btn btn-success btn-sm']);
+                            ?>
+                            <tr class="<?=$additional_book_row?>">
+                                <td><?=$r['name']?></td>
+                                <td><?=$r['meal_plan']?></td>
+                                <td class='orange'>On Request</td>
+                                <td><span class='gray5 mr10'><?=$for?>:</span><span class='blue font17'>US$<?=$r['price']?></span></td>
+                                <td><?=$book?></td>
+                            </tr>
+                            <?php
+                            $i++;
                         }
                         ?>
                     </table>
+                    <?=Html::a('&nbsp;&nbsp;Show more room types','#',['class'=>'js_show_additional_book_rows no_underline green','data-id'=>$model->id])?>
 
         <?php
                 }

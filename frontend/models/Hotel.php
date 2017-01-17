@@ -29,6 +29,9 @@ use yii\helpers\ArrayHelper;
  * @property integer $stars
  * 
  * @property integer $nationality_id
+ * @property integer $adult
+ * @property integer $children
+ * @property array $child_age
  * @property string $date_from
  * @property string $date_to
  *
@@ -42,6 +45,9 @@ class Hotel extends MyModel
     public $nationality_id;
     public $date_from;
     public $date_to;
+    public $adult;
+    public $children;
+    public $child_age=[];
     /**
      * @inheritdoc
      */
@@ -89,6 +95,9 @@ class Hotel extends MyModel
             'latlong' => Yii::t('app', 'Latlong'),
             'sku' => Yii::t('app', 'Sku'),
             'stars' => Yii::t('app', 'Stars'),
+            'date_from'=>'Check in date',
+            'date_to'=>'Check out date',
+            'adult'=>'Adults'
         ];
 
         return ArrayHelper::merge(parent::attributeLabels(),$labels);

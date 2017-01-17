@@ -46,7 +46,7 @@ $city_id=1; //Dubai by default
         <?= Html::dropDownList('city',$city_id, $cities,['prompt'=>'Select City..', 'id'=>'hotel-city_id']); ?>
     </div>
     <div class="form-group">
-        <?= Html::dropDownList('stars',null, ['No stars','1','2','3','4','5','6','7'],['prompt'=>'Select Stars...']); ?>
+        <?= Html::dropDownList('stars',null, ['Select Stars...','1','2','3','4','5',8=>'Apartment',9=>'unrated'],[]); ?>
     </div>
 
     <div class="form-group oh clear">

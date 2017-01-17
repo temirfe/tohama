@@ -161,3 +161,31 @@ function startChange(data){
     }
     $('.js_nights_count').text(diff+'-night stay');
 }
+
+$('.js_show_additional_book_rows').click(function(e){
+    e.preventDefault();
+    var id=$(this).attr('data-id');
+    $('.js_tbl_'+id).find('.js_book_row_additional').slideDown();
+    $(this).hide();
+});
+
+//child age
+$('.js_children').change(function(){
+    var label=$('.js_child_ages_label');
+    var date=label.attr('data-date');
+    var children=$(this).val();
+    var container=$('.js_child_ages');
+    container.html('');
+
+    if(children>0){
+        if(children==1){label.text("Age of child on "+date);}
+        else {label.text("Age of children on "+date);}
+    }
+    else{label.text("");}
+
+    var input;
+    for (var i=0; i<children; i++){
+        input=$('.js_child_here select').clone();
+        container.append(input);
+    }
+});

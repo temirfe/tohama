@@ -19,7 +19,7 @@ class HotelSearch extends Hotel
     {
         return [
             [['id', 'country_id', 'city_id', 'stars'], 'integer'],
-            [['title', 'text', 'neighborhood', 'address', 'image', 'latlong', 'sku','date_from','date_to'], 'safe'],
+            [['title', 'text', 'neighborhood', 'address', 'image', 'latlong', 'sku','date_from','date_to','nationality_id','adult','children','child_age'], 'safe'],
         ];
     }
 
@@ -64,8 +64,8 @@ class HotelSearch extends Hotel
             'id' => $this->id,
             'country_id' => $this->country_id,
             'city_id' => $this->city_id,
-            'stars' => $this->stars,
         ]);
+        if($this->stars){$query->andFilterWhere(['stars' => $this->stars]);}
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'text', $this->text])

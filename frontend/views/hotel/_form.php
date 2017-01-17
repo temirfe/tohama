@@ -123,7 +123,7 @@ else $cities=[];
 
     <?= $form->field($model, 'latlong')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'stars')->dropDownList(['0','1','2','3','4','5','6','7'],['prompt'=>'Select..']); ?>
+    <?= $form->field($model, 'stars')->dropDownList(['Select..','1 Star','2 Stars','3 Stars','4 Stars','5 Stars',8=>'Apartment',9=>'unrated'],[]); ?>
 
     <div class="js_skus">
         <?php

@@ -185,6 +185,7 @@ a.desc:after {
 .underline{text-decoration: underline;}
 a.underline:hover{text-decoration: none;}
 .rb{border-right: 1px solid #eaeaea; margin-right: 10px; padding-right: 10px;}
+.light{color:#f1f1f1;}
 .blue{color:#055cb3;}
 .black{color:#000;}
 .green{color:#449d44;}
@@ -209,6 +210,7 @@ a.red:hover{color:#e9465b;}
 .gray5{color:rgb(153, 153, 153);}
 .color5{color:#555;}
 .color69{color:#696969;}
+.color9{color:#999;}
 .bbpurple{border-bottom: 1px solid #6a67ce;}
 .bbgray{border-bottom: 1px solid #e6e6e6;}
 .btgray{border-top: 1px solid #e6e6e6;}
@@ -249,7 +251,8 @@ div.navbar-header{}
     transition: color 0.2s ease;
 }
 .slider{
-    width: 100%;}
+    width: 100%; padding-bottom: 20px;
+    padding-top: 160px;}
 .slider img{width:100%;}
 .navbar-nav > li.active a {
     color:#f8a411;
@@ -509,3 +512,37 @@ h1, .h1 {
     overflow: hidden;}
 .bold{
     font-weight:bold;}
+.book-table td{vertical-align: middle !important;}
+.hotel-search label{font-size:12px; margin-bottom: 2px;}
+.hotel-search .help-block{margin:2px 0;}
+.hotel-search .form-group {
+    margin-bottom: 7px;
+}
+.children_sel{padding:2px;}
+.index_hotel_search{
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);}
+.index_hotel_search label,.index_hotel_search .has-success label {
+    color: #f1f1f1;
+}
+.search_container{
+    margin-left: auto;
+    margin-right: auto;
+    width: 910px;
+}
+.search_tab{
+    display: inline-block;
+    font-size: 20px;
+    padding: 8px 25px 2px;
+}
+.hotels_tab{
+    background-color: rgba(0, 0, 0, 0.8);
+    margin-left: -15px;
+    color: #f1f1f1;
+}
+.flights_tab{
+    background-color: rgba(226, 226, 226, 0.8);
+    color: #333;
+    margin-left: -4px;
+    display: none;
+}

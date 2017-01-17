@@ -4,11 +4,10 @@
 /* @var $content string */
 
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use frontend\models\HotelSearch;
 
 AppAsset::register($this);
 $controller=Yii::$app->controller->id;
@@ -21,8 +20,6 @@ if(!isset($user_id) && $identity) $user_id=$identity->id; else $user_id='';
 if(!isset($user_name) && $identity) $user_name=$identity->username; else $user_name='';
 if(!isset($user_role) && $identity) $user_role=$identity->role; else $user_role='';
 if(!isset($dao)) $dao=Yii::$app->db;
-
-if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $about_active=true; else $about_active=false;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -45,44 +42,20 @@ if($controller=='page' && $action=="view" && Yii::$app->request->get('id')==1) $
     if(!$isGuest && $user_role=='admin'){include_once('_adminpanel.php');}
     //elseif(!$isGuest && $user_role=='Moderator'){include_once('_moderpanel.php');}
     //elseif(!$isGuest && $user_role=='ContentManager'){include_once('_cmanagerpanel.php');}
+    include_once('_nav.php');
     ?>
-    <?php
 
-    NavBar::begin([
-        'brandLabel' => "<div class='logo_wrap  logo_wrap_index js_logo_wrap'></div>",
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'mynavbar navbar-fixed-top',
-        ],
-    ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About us', 'url' => ['/page/1'], 'active'=>$about_active],
-        ['label' => 'Explore UAE', 'url' => ['/site/explore']],
-        ['label' => 'Destinations', 'url' => ['/destination/show']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
-    }
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
-    ?>
     <?php
         if($controller=="site" && $action=="index"){
-            echo "<div class='slider'>".Html::img("images/bg_sunset.jpg")."</div>";
+            ?>
+            <div class='slider'>
+                <div class="search_container">
+                    <span class="hotels_tab search_tab">Hotels</span>
+                    <span class="flights_tab search_tab">Flights</span>
+                    <?=$this->render('/hotel/_search', ['model' => new HotelSearch(), 'index'=>true]);?>
+                </div>
+            </div>
+            <?php
         }
     ?>
 

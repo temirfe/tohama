@@ -24,8 +24,11 @@ include_once($webroot.'/photoswipe/_swipe.php');
             <span class="star_wrap">
                     <?php
                     if($model->stars){
-                        for($i=0;$i<$model->stars; $i++){
-                            echo "<span class='glyphicon glyphicon-star star'></span>";
+                        if($model->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
+                        else{
+                            for($i=0;$i<$model->stars; $i++){
+                                echo "<span class='glyphicon glyphicon-star star'></span>";
+                            }
                         }
                     }
                     ?>
