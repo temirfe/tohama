@@ -33,8 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             //'link',
             //'type',
-            //'title',
-            // 'description',
+            'title',
+            'description',
 
             ['class' => 'yii\grid\ActionColumn', 'contentOptions'=>['width'=>80]],
         ],

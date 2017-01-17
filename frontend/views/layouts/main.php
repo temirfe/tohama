@@ -20,6 +20,19 @@ if(!isset($user_id) && $identity) $user_id=$identity->id; else $user_id='';
 if(!isset($user_name) && $identity) $user_name=$identity->username; else $user_name='';
 if(!isset($user_role) && $identity) $user_role=$identity->role; else $user_role='';
 if(!isset($dao)) $dao=Yii::$app->db;
+if($controller=="site" && $action=="index")
+{
+    $banner_title=''; $banner_description='';
+    $banner = $dao->createCommand("SELECT * FROM banner ORDER BY id DESC")->queryOne();
+    if($banner){
+        if($banner['link']) {
+            $banner_title=Html::a($banner['title'],$banner['link'],['class'=>'no_underline']);
+            $banner_description=Html::a($banner['description'],$banner['link'],['class'=>'no_underline']);
+        }
+        else {$banner_title=$banner['title']; $banner_description=$banner['description'];}
+    }
+}
+else {$banner=['id'=>'','image'=>''];}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -33,6 +46,9 @@ if(!isset($dao)) $dao=Yii::$app->db;
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="shortcut icon" href="/images/favicon2.ico" type="image/x-icon">
     <link rel="icon" href="/images/favicon2.ico" type="image/x-icon">
+    <style type="text/css">
+        .slider{background:rgba(0, 0, 0, 0) url("/images/banner/<?=$banner['id']?>/<?=$banner['image']?>") no-repeat scroll 0 center / 100% auto;}
+    </style>
 </head>
 <body data-spy="scroll" data-target="#myScrollspy" data-offset="140" id="top">
 <?php $this->beginBody() ?>
@@ -48,7 +64,11 @@ if(!isset($dao)) $dao=Yii::$app->db;
     <?php
         if($controller=="site" && $action=="index"){
             ?>
-            <div class='slider'>
+            <div class='slider rel'>
+                <div class="slider_title abs">
+                    <h1 class="mt0"><?=$banner_title?></h1>
+                    <?=$banner_description?>
+                </div>
                 <div class="search_container">
                     <span class="hotels_tab search_tab">Hotels</span>
                     <span class="flights_tab search_tab">Flights</span>

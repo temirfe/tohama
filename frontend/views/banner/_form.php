@@ -15,6 +15,9 @@ use kartik\file\FileInput;
     <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
 
     <?= $form->errorSummary($model); ?>
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'link')->textInput(['maxlength' => true]) ?>
     <?php
     $key = $model->id;
     $url = Url::to(['site/img-delete', 'id' => $key, 'model_name'=>'banner']);
