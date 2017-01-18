@@ -19,7 +19,8 @@ $this->title = $name.' - Tohama Travel & Tourism LLC';
     <?php
     foreach($data as $sheet_title=>$sheet_array){
         if($sheet_array['found']){
-            echo "<tr><td>".$sheet_title."</td><td><span class='green'>saved</span></td></tr>";
+            if(!empty($sheet_array['already'])){$msg='unchanged'; $color='blue';} else{$msg='saved'; $color='green';}
+            echo "<tr><td>".$sheet_title."</td><td><span class='{$color}'>{$msg}</span></td></tr>";
             /*foreach($sheet_array['rows'] as $sheet_rows){
                 echo "<pre>";
                 print_r($sheet_rows);

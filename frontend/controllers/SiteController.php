@@ -283,9 +283,23 @@ class SiteController extends Controller
                 $newname = time().".".$ext;
 
                 $target = 'upload/'.$newname;
+                $excel_name=$_FILES['excel']['name'];
+
+                $dao=Yii::$app->db;
+                $check_excel=$dao->createCommand("SELECT id FROM excel WHERE title=:title")->bindParam('title',$excel_name)->queryOne();
+                if($check_excel){$data['excel_id']= $check_excel['id'];}
+                if(!empty($data['excel_id'])){
+                    $data['new_excel']=false;
+                }
+                else{
+                    $data['new_excel']=true;
+                    $dao->createCommand()->insert('excel', ['title' => $excel_name])->execute();
+                    $data['excel_id']=$dao->getLastInsertID();
+                }
+
                 move_uploaded_file( $_FILES['excel']['tmp_name'], $target);
                 //$parsed_data=$this->parseExcel($newname,$data);
-                $parsed_data=$this->parseAkeneoExcel($newname,$data);
+                $parsed_data=$this->parseExcel($newname,$data);
                 $time_end = microtime(true);
                 $execution_seconds=$time_end - $time_start;
                 return $this->render('excelresult',['data'=>$parsed_data,'time'=>$execution_seconds]);
@@ -296,7 +310,10 @@ class SiteController extends Controller
         return $this->render('loadexcel',['error'=>$error]);
     }
 
-    protected function parseAkeneoExcel($filename,$data){
+    protected function parseExcel($filename,$data){
+        $dir=Yii::getAlias('@webroot');
+        $file=$dir.'/upload/'.$filename;
+        $workbook = SpreadsheetParser::open($file);
         $dao=Yii::$app->db;
         if($stars=$data['stars']){
             $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}' AND stars='{$stars}'";
@@ -305,37 +322,45 @@ class SiteController extends Controller
             $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}'";
         }
         $skus_rows = $dao->createCommand($skus_query)->queryAll();
+        $skus=ArrayHelper::map($skus_rows,'id','title');
+        $hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
 
-        $dir=Yii::getAlias('@webroot');
-        $file=$dir.'/upload/'.$filename;
-        $workbook = SpreadsheetParser::open($file);
-        $parse_result=$this->parseSheets2($workbook,$skus_rows);
-        $this->saveResult($parse_result,$data);
-        return $parse_result;
-    }
+        if(!$data['new_excel']){
+            $eresult = $dao->createCommand("SELECT id,title FROM worksheet WHERE excel_id='{$data['excel_id']}'")->queryAll();
+            if($eresult){
+                $already_saveds=ArrayHelper::map($eresult,'id','title');
+            }
+        }
 
-    protected function parseSheets2($workbook,$skus_rows){
         $worksheets=$workbook->getWorksheets();
 
         $sheets = [];
-        $skus=ArrayHelper::map($skus_rows,'id','title');
-        $hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
         foreach($worksheets as $sheet_title){
             if($sku_id=array_search($sheet_title, $skus)){
                 $sheets[$sheet_title]['found']=true;
-                $sheets[$sheet_title]['hotel_id']=$hotel_ids[$sku_id];
-                $myWorksheetIndex = $workbook->getWorksheetIndex($sheet_title);
-                $arrows=$workbook->createRowIterator($myWorksheetIndex);
-                $sheets[$sheet_title]['rows']=$this->getRows2($arrows);
+                if(isset($already_saveds) && in_array($sheet_title, $already_saveds)){
+                    $sheets[$sheet_title]['already']=true;
+                }
+                else{
+                    $sheets[$sheet_title]['hotel_id']=$hotel_ids[$sku_id];
+                    $myWorksheetIndex = $workbook->getWorksheetIndex($sheet_title);
+                    $arrows=$workbook->createRowIterator($myWorksheetIndex);
+                    $sheets[$sheet_title]['rows']=$this->getRows($arrows);
+                }
             }
             else {
                 $sheets[$sheet_title]['found']=false;
             }
         }
+        $this->saveResult($sheets,$data);
         return $sheets;
     }
 
-    protected function getRows2($arrows){
+    protected function parseSheets($workbook,$data){
+
+    }
+
+    protected function getRows($arrows){
         $start=false;
         $room_type='';
         $quality_rows=[];
@@ -362,35 +387,12 @@ class SiteController extends Controller
         return $quality_rows;
     }
 
-    protected function parseExcel($filename,$data){
-        $dao=Yii::$app->db;
-        if($stars=$data['stars']){
-            $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}' AND stars='{$stars}'";
-        }
-        else{
-            $skus_query = "SELECT id,title,hotel_id FROM sku WHERE country_id='{$data['country_id']}' AND city_id='{$data['city_id']}'";
-        }
-        $skus_rows = $dao->createCommand($skus_query)->queryAll();
-
-        $dir=Yii::getAlias('@webroot');
-        if(is_file($file=$dir.'/upload/'.$filename)){
-            $objReader =  \PHPExcel_IOFactory::createReaderForFile($file);
-            $objReader->setReadDataOnly(true);
-            $objPHPExcel=$objReader->load($file);
-            //$parse_result=$this->parseSingleSheet($objPHPExcel,$skus_rows);
-            //$parse_result=$this->parseSheets($objPHPExcel, $skus_rows);
-            //$this->saveResult($parse_result,$data);
-           // return $parse_result;
-            return false;
-
-        }
-        else return 'not a valid file';
-    }
-
     protected function saveResult($result,$data){
         $batch_row=[];
+        $new_saved_sheets=[];
         foreach($result as $sheet_title=>$sheet_array){
-            if($sheet_array['found']){
+            if(!empty($sheet_array['rows'])){
+                $new_saved_sheets[]=[$sheet_title,$data['excel_id']];
                 foreach($sheet_array['rows'] as $sheet_row){
                     if(strtolower($sheet_row[0])!='room type'){
                         $sheet_row[12]=$sheet_array['hotel_id'];
@@ -401,10 +403,12 @@ class SiteController extends Controller
                 }
             }
         }
-        Yii::$app->db->createCommand()->batchInsert('roomprice',
+        $dao=Yii::$app->db;
+        $dao->createCommand()->batchInsert('roomprice',
             ['room','season','meal_plan','date_from','date_to','sgl_room','dbl_person','third_pax','adult_hb','child_bb','child_eb','child_hb','hotel_id', 'country_id','city_id'],
             $batch_row
         )->execute();
+        $dao->createCommand()->batchInsert('worksheet',['title','excel_id'], $new_saved_sheets)->execute();
     }
 
     protected function parseSingleSheet($objPHPExcel, $skus_rows){
@@ -419,104 +423,6 @@ class SiteController extends Controller
         $sheets[$sheet_title]['hotel_id']=4;
         $sheets[$sheet_title]['rows']=$this->getRows($arrows);
         return $sheets;
-    }
-
-    protected function parseSheets($objPHPExcel,$skus_rows){
-        $sheets = [];
-        $skus=ArrayHelper::map($skus_rows,'id','title');
-        $hotel_ids=ArrayHelper::map($skus_rows,'id','hotel_id');
-        foreach ($objPHPExcel->getAllSheets() as $sheet) {
-            $sheet_title=$sheet->getTitle();
-            if($sku_id=array_search($sheet_title, $skus)){
-                $sheets[$sheet_title]['found']=true;
-                $sheets[$sheet_title]['hotel_id']=$hotel_ids[$sku_id];
-                $arrows=$sheet->toArray();
-                $sheets[$sheet_title]['rows']=$this->getRows($arrows);
-            }
-            else {
-                $sheets[$sheet_title]['found']=false;
-            }
-        }
-        return $sheets;
-    }
-
-    protected function getRows($arrows){
-        $start=false;
-        $room_type='';
-        $quality_rows=[];
-        foreach($arrows as $arrow){
-            if(!$start){if($arrow[0]=='Room Type'){$start=true;}}
-            if($start && !empty($arrow[1]) && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
-                if($arrow[0]){$room_type=$arrow[0];}
-
-                if(strtolower($arrow[3])!='from'){$date_from=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[3])); }
-                else{$date_from=$arrow[3];}
-                if(strtolower($arrow[4])!='to'){$date_to=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[4])); }
-                else{$date_to=$arrow[4];}
-
-                $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$arrow[6],$arrow[7],$arrow[8],$arrow[9],$arrow[10],$arrow[11]];
-            }
-        }
-        return $quality_rows;
-    }
-
-    protected function parseExcel2($filename,$data){
-        $dir=Yii::getAlias('@webroot');
-        if(is_file($file=$dir.'/upload/'.$filename)){
-            $objReader =  \PHPExcel_IOFactory::createReaderForFile($file);
-            $objReader->setReadDataOnly(true);
-            $objPHPExcel=$objReader->load($file);
-            //$objWorksheet = $objPHPExcel->getActiveSheet();
-
-            $objPHPExcel->setActiveSheetIndex(2);
-            $objWorksheet = $objPHPExcel->getActiveSheet();
-            $arrows=$objWorksheet->toArray();
-
-            /*echo "<pre>";
-            print_r($sheetArray);
-            echo "</pre>";*/
-
-            $start=false;
-            $room_type='';
-            $quality_rows=[];
-            foreach($arrows as $arrow){
-                if(!$start){if($arrow[0]=='Room Type'){$start=true;}}
-                if($start && !empty($arrow[1]) && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
-                    if($arrow[0]){$room_type=$arrow[0];}
-
-                    if(strtolower($arrow[3])!='from'){$date_from=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[3])); }
-                    else{$date_from=$arrow[3];}
-                    if(strtolower($arrow[4])!='to'){$date_to=date("Y-m-d", \PHPExcel_Shared_Date::ExcelToPHP($arrow[4])); }
-                    else{$date_to=$arrow[4];}
-
-                    $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$arrow[6],$arrow[7],$arrow[8],$arrow[9],$arrow[10],$arrow[11]];
-                }
-            }
-            echo "<pre>";
-            print_r($quality_rows);
-            echo "</pre>";
-
-            $sheets = [];
-            /*foreach ($objPHPExcel->getAllSheets() as $sheet) {
-                echo $sheet->getTitle()."<br />";
-                //$sheets[$sheet->getTitle()] = $sheet->toArray();
-            }*/
-
-            /*$highestRow = $objWorksheet->getHighestRow(); // e.g. 10
-            $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
-            $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
-
-            for ($row = 1; $row <= $highestRow; ++$row)
-            {
-                for ($col = 0; $col <= $highestColumnIndex; ++$col) {
-                    $curval=$objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
-                    $curval=preg_replace('/\s+/S', " ", $curval);
-                    echo $curval.'----';
-                }
-                echo "<br />";
-            }*/
-        }
-        else echo 'not a valid file';
     }
 
     public function actionTest(){
@@ -554,7 +460,12 @@ class SiteController extends Controller
     }
 
     public function actionRun(){
-        $stay_start='2016-01-27';
+        $dao=Yii::$app->db;
+        $dao->createCommand()->insert('ferrum', [
+            'text' => 'Sam',
+        ])->execute();
+        echo $dao->getLastInsertID();
+       /* $stay_start='2016-01-27';
         $stay_end='2016-01-30';
         $stay_times=[];
         for($i=strtotime($stay_start);$i<=strtotime($stay_end);$i+=86400){
@@ -571,7 +482,7 @@ class SiteController extends Controller
             if(in_array($i,$stay_times)){
                 echo "yo<br />";
             }
-        }
+        }*/
     }
 
 
