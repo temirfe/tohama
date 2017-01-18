@@ -90,7 +90,21 @@ else {$banner=['id'=>'','image'=>''];}
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Tohama Travel & Tourism LLC <?= date('Y') ?></p>
+        <div class="pull-left mr20">&copy; Tohama Travel & Tourism LLC <?= date('Y') ?></div>
+        <div class="ml20">
+            <?php
+            if (Yii::$app->user->isGuest) {
+                echo Html::a('Customer Login',['/site/login'],['class'=>'gray5 font12']);
+            } else {
+                echo Html::beginForm(['/site/logout'], 'post')
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'btn btn-link logout']
+                    )
+                    . Html::endForm();
+            }
+            ?>
+        </div>
     </div>
 </footer>
 <a href="#" class="scrollToTop"><span class="glyphicon glyphicon-arrow-up"></span></a>

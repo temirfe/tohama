@@ -461,28 +461,18 @@ class SiteController extends Controller
 
     public function actionRun(){
         $dao=Yii::$app->db;
-        $dao->createCommand()->insert('ferrum', [
-            'text' => 'Sam',
-        ])->execute();
-        echo $dao->getLastInsertID();
+        $lol='Radisson Blu Hotel Deira Creek';
+        $result = $dao->createCommand("SELECT * FROM sku")->queryAll();
+
+        $skus=ArrayHelper::map($result,'id','title');
+        if(in_array($lol,$skus)) echo "good"; else echo "not good";
        /* $stay_start='2016-01-27';
         $stay_end='2016-01-30';
         $stay_times=[];
         for($i=strtotime($stay_start);$i<=strtotime($stay_end);$i+=86400){
             //echo date('Y-m-d',$i)."<br />";
-            $stay_times[]=$i;
-        }
+            $stay_times[]=$i;*/
 
-        echo "<br />";
-        $start='2016-01-24';
-        $end='2016-01-28';
-        //echo strtotime($start).' '.strtotime($end);
-        for($i=strtotime($start);$i<=strtotime($end);$i+=86400){
-            //echo date('Y-m-d',$i)."<br />";
-            if(in_array($i,$stay_times)){
-                echo "yo<br />";
-            }
-        }*/
     }
 
 
