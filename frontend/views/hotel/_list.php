@@ -36,9 +36,11 @@ if($get['date_from'] && $get['date_to']){
         if($model->stars){
             if($model->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
             else{
+                echo "<span class='iblock'>";
                 for($i=0;$i<$model->stars; $i++){
                     echo "<span class='glyphicon glyphicon-star list_star'></span>";
                 }
+                echo "</span>";
             }
         }
         ?>
