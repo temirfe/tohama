@@ -284,6 +284,8 @@ class HotelController extends MyController
             $text=preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i",'<$1$2>', $text);
             $text=preg_replace("/<a.*?>.*?<\/a>/i",'', $text);
             $text=str_replace('Booking.com','Tohamatravel.com', $text);
+            $text=str_replace('â',"'", $text);
+            $text=str_replace('¢',"", $text);
             //echo $text;
 
             if($title){
