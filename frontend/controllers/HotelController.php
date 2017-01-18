@@ -19,7 +19,7 @@ class HotelController extends MyController
      * Lists all Hotel models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionSearch()
     {
         $searchModel = new HotelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

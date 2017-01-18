@@ -13,14 +13,14 @@ use kartik\date\DatePicker;
     <h3 class="mt5 blue">Search</h3>
 
     <?php $form = ActiveForm::begin([
-        'action' => ['/hotel/index'],
+        'action' => ['/hotel/search'],
         'method' => 'get',
     ]); ?>
     <?= $form->field($model, 'country_id')->dropDownList($countries,['prompt'=>'Select country..','id'=>'hotel-country_id']); ?>
     <?= $form->field($model, 'city_id')->dropDownList($cities,['prompt'=>'Select city..', 'id'=>'hotel-city_id']); ?>
     <?= $form->field($model, 'nationality_id')->dropDownList($nations,['prompt'=>'Select Nationality..']); ?>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 pr5">
             <?php
             echo $form->field($model, 'date_from')->widget(DatePicker::classname(), [
                 'options' => [],
@@ -37,7 +37,7 @@ use kartik\date\DatePicker;
             ]);
             ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 pl5">
             <?php
             echo $form->field($model, 'date_to')->widget(DatePicker::classname(), [
                 'options' => [],
@@ -46,7 +46,6 @@ use kartik\date\DatePicker;
                 'pluginOptions' => [
                     'autoclose'=>true,
                     'format' => 'dd M yyyy',
-                    'startDate'=>date('d/m/Y', strtotime('+1 days'))
                 ]
             ]);
             ?>
@@ -68,7 +67,7 @@ use kartik\date\DatePicker;
     <div class="js_child_ages_label font12 gray5 mb2" data-date="<?=$model->date_to?>"></div>
     <div class="js_child_ages mb15">
         <?php
-            if($get['child_age']){
+            if(!empty($get['child_age'])){
                 foreach($get['child_age'] as $age){
                     echo $form->field($model, 'child_age[]')->dropDownList(range(0,17),['class'=>'mr5', 'id'=>false, 'value'=>$age])->label(false);
                 }

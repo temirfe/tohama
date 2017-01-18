@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Hotels');
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="hotel-index">

@@ -74,7 +74,8 @@ if($get['date_from'] && $get['date_to']){
                 }
                 if($room){
                     ?>
-                    <table class="table book-table mb0 js_tbl_<?=$model->id?>">
+                    <div class="font12 color9">Availability: <span class="orange">On Request</span><span class="ml20"><?=$for?></span></div>
+                    <table class="table book-table mb0 table-striped js_tbl_<?=$model->id?>">
                         <?php
                         $i=0;
                         foreach($room as $r){
@@ -86,8 +87,7 @@ if($get['date_from'] && $get['date_to']){
                             <tr class="<?=$additional_book_row?>">
                                 <td><?=$r['name']?></td>
                                 <td><?=$r['meal_plan']?></td>
-                                <td class='orange'>On Request</td>
-                                <td><span class='gray5 mr10'><?=$for?>:</span><span class='blue font17'>US$<?=$r['price']?></span></td>
+                                <td><span class='gray5 mr10'></span><span class='blue font17'>US$<?=$r['price']?></span></td>
                                 <td><?=$book?></td>
                             </tr>
                             <?php

@@ -12,7 +12,7 @@ use kartik\date\DatePicker;
 
 <div class="hotel-search row pad10 index_hotel_search">
     <?php $form = ActiveForm::begin([
-        'action' => ['/hotel/index'],
+        'action' => ['/hotel/search'],
         'method' => 'get',
     ]); ?>
     <div class="row">
@@ -48,7 +48,7 @@ use kartik\date\DatePicker;
                 'pluginOptions' => [
                     'autoclose'=>true,
                     'format' => 'dd M yyyy',
-                    'startDate'=>date('d/m/Y', strtotime('+1 days'))
+                    //'startDate'=>date('d/m/Y', strtotime('+1 days'))
                 ]
             ]);
             ?>
@@ -68,7 +68,7 @@ use kartik\date\DatePicker;
             <div class="js_child_ages_label font12 gray5 mb2" data-date="<?=$model->date_to?>"></div>
             <div class="js_child_ages mb15">
                 <?php
-                if($get['child_age']){
+                if(!empty($get['child_age'])){
                     foreach($get['child_age'] as $age){
                         echo $form->field($model, 'child_age[]')->dropDownList(range(0,17),['class'=>'mr5', 'id'=>false, 'value'=>$age])->label(false);
                     }
