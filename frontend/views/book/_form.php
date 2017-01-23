@@ -15,7 +15,7 @@ if(isset($get['room'])){
 }
 $hotel=Hotel::findOne($model->hotel_id);
 $img=Html::img($hotel->thumb,['class'=>'list_thumb']);
-$role=Yii::$app->user->identity->role;
+if(Yii::$app->user->identity) $role=Yii::$app->user->identity->role;
 ?>
 
 <div class="book-form">
@@ -28,7 +28,7 @@ $role=Yii::$app->user->identity->role;
             <?=Html::a($hotel->title,['/hotel/view','id'=>$hotel->id],['class'=>'hotel_list_title blue no_underline']); ?>
             <?php
             if($hotel->stars){
-                if($model->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
+                if($hotel->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
                 else{
                     for($i=0;$i<$hotel->stars; $i++){
                         echo "<span class='glyphicon glyphicon-star list_star'></span>";
@@ -68,7 +68,7 @@ $role=Yii::$app->user->identity->role;
 
     <?= $form->field($model, 'note')->textInput(['maxlength' => true])->hint('Any additional information you would like to share about this order') ?>
 
-    <?php if($role=='admin') echo $form->field($model, 'admin_note')->textInput(['maxlength' => true]); ?>
+    <?php if(!empty($role) && $role=='admin') echo $form->field($model, 'admin_note')->textInput(['maxlength' => true]); ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
