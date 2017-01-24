@@ -299,9 +299,13 @@ class SiteController extends Controller
 
                 move_uploaded_file( $_FILES['excel']['tmp_name'], $target);
                 //$parsed_data=$this->parseExcel($newname,$data);
-                $parsed_data=$this->parseExcel($newname,$data);
+                $parsed_data=$this->parseExcelTest($newname);
+                echo "<pre>";
+                print_r($parsed_data);
+                echo "</pre>";
                 $time_end = microtime(true);
                 $execution_seconds=$time_end - $time_start;
+                die();
                 return $this->render('excelresult',['data'=>$parsed_data,'time'=>$execution_seconds]);
             }
         }
@@ -356,8 +360,64 @@ class SiteController extends Controller
         return $sheets;
     }
 
-    protected function parseSheets($workbook,$data){
+    protected function parseExcelTest($filename){
+        $dir=Yii::getAlias('@webroot');
+        $file=$dir.'/upload/'.$filename;
+        $workbook = SpreadsheetParser::open($file);
+        $dao=Yii::$app->db;
 
+        $worksheets=$workbook->getWorksheets();
+
+        $sheets = [];
+        $myWorksheetIndex = $workbook->getWorksheetIndex("Grand Hyatt");
+        $arrows=$workbook->createRowIterator($myWorksheetIndex);
+        $sheets['rows']=$this->getRowsTest($arrows);
+
+        return $sheets;
+    }
+
+    protected function getRowsTest($arrows){
+        $start=false;
+        $room_type='';
+        $quality_rows=[];
+        $prev_empty=false;
+        $info=[];
+        foreach ($arrows as $rowIndex => $arrow) {
+            if(!$start){if(trim(strtolower($arrow[0]))=='room type'){$start=true;}}
+            if($start && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
+                if($arrow[0]){$room_type=$arrow[0];}
+
+                if(is_object($arrow[3])){$fromDateObj=$arrow[3]; $date_from=$fromDateObj->format('Y-m-d');}
+                else $date_from=$arrow[3]; //
+                if(is_object($arrow[4])){$toDateObj=$arrow[4]; $date_to=$toDateObj->format('Y-m-d');}
+                else $date_to=$arrow[4];//it's column label: "To";
+
+                if(isset($arrow[6]))$row6=$arrow[6]; else $row6='';
+                if(isset($arrow[7]))$row7=$arrow[7]; else $row7='';
+                if(isset($arrow[8]))$row8=$arrow[8]; else $row8='';
+                if(isset($arrow[9]))$row9=$arrow[9]; else $row9='';
+                if(isset($arrow[10]))$row10=$arrow[10]; else $row10='';
+                if(isset($arrow[11]))$row11=$arrow[11]; else $row11='';
+
+                $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$row6,$row7,$row8,$row9,$row10,$row11];
+                $prev_empty=false;
+            }
+            else{
+                echo "row::".$arrow[0].' ';
+                if(!$arrow[0]){
+                    $prev_empty=true;
+                    echo $rowIndex.') empty row <br />';
+                }
+                elseif(!empty($arrow[0])){
+                    if($prev_empty){$info[]['title']=$arrow[0];}
+                    else{$info[]['description']=$arrow[0];}
+                    $prev_empty=false;
+                    echo $rowIndex.') not empty <br />';
+                }
+            }
+        }
+        //return $quality_rows;
+        //return $info;
     }
 
     protected function getRows($arrows){
