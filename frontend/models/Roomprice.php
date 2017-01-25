@@ -27,6 +27,7 @@ use Yii;
  * @property string $child_hb
  * @property integer $promotional
  * @property string $booking_code
+ * @property integer $excel_id
  *
  * @property Hotel $hotel
  * @property Country $country
@@ -49,7 +50,7 @@ class Roomprice extends \yii\db\ActiveRecord
     {
         return [
             [['hotel_id', 'country_id', 'city_id', 'market_id', 'room', 'room_note', 'season', 'meal_plan', 'date_from', 'date_to', 'sgl_room', 'dbl_person', 'third_pax', 'adult_hb', 'child_bb', 'child_eb', 'child_hb', 'booking_code'], 'required'],
-            [['hotel_id', 'country_id', 'city_id', 'market_id', 'sgl_room', 'promotional'], 'integer'],
+            [['hotel_id', 'country_id', 'city_id', 'market_id', 'sgl_room', 'promotional','excel_id'], 'integer'],
             [['date_from', 'date_to'], 'safe'],
             [['room', 'room_note'], 'string', 'max' => 50],
             [['season', 'meal_plan', 'dbl_person', 'third_pax', 'adult_hb', 'child_bb', 'child_eb', 'child_hb'], 'string', 'max' => 20],

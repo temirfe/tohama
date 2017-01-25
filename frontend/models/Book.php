@@ -14,12 +14,15 @@ use Yii;
  * @property string $email
  * @property string $note
  * @property integer $hotel_id
+ * @property integer $read
  * @property string $admin_note
+ * @property integer $excel_id
  *
  * @property Hotel $hotel
  */
 class Book extends \yii\db\ActiveRecord
 {
+    public $read;
     /**
      * @inheritdoc
      */
@@ -35,9 +38,10 @@ class Book extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'name', 'phone', 'email','hotel_id'], 'required'],
-            [['hotel_id'], 'integer'],
+            [['hotel_id','excel_id'], 'integer'],
             [['title', 'name', 'note', 'admin_note'], 'string', 'max' => 500],
             [['phone', 'email'], 'string', 'max' => 100],
+            [['read'], 'required','requiredValue' => 1,'message' => 'Please read hotel terms and conditions'],
             [['date_book'], 'safe'],
         ];
     }
@@ -57,6 +61,7 @@ class Book extends \yii\db\ActiveRecord
             'hotel_id' => 'Hotel ID',
             'admin_note' => 'Admin Note',
             'date_book' => 'Date booked',
+            'read'=>"I have read Hotel Terms & Conditions below"
         ];
     }
 

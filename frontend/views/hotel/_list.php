@@ -61,9 +61,12 @@ if($get['date_from'] && $get['date_to']){
                 for($i=strtotime($stay_start);$i<strtotime($stay_end);$i+=86400){
                     $stay_times[]=$i;
                 }
-                $room=[];
+                if(!empty($get['child_age'])) $child_age=implode(',',$get['child_age']);
+                else $child_age=0;
+                $room=[];$excel_id=0;
                 foreach($rowprices as $row){
                     $price_add=false;
+                    if(!$excel_id) $excel_id=$row->excel_id;
                     if(!isset($room[$row->room])){$room[$row->room]['name']=$row->room; $room[$row->room]['meal_plan']=$row->meal_plan; $room[$row->room]['price']=0; $price_add=true;}
                     for($i=strtotime($row->date_from);$i<=strtotime($row->date_to);$i+=86400){
                         if(in_array($i,$stay_times)){
@@ -74,14 +77,21 @@ if($get['date_from'] && $get['date_to']){
                 }
                 if($room){
                     ?>
-                    <div class="font12 color9">Availability: <span class="orange">On Request</span><span class="ml20"><?=$for?></span></div>
+                    <div class="font12 color9">Availability: <span class="orange">On Request</span>
+                        <span class="ml20"><?=$for?></span>
+                        <span class="ml20">
+                            <?=Html::a('Terms&Conditions','#',['class'=>'js_terms_link dotted_link no_underline blue',
+                                'data-toggle'=>"modal", 'data-target'=>"#terms-modal", 'data-hotel'=>$model->id, 'data-excel'=>$excel_id])?>
+                        </span>
+                    </div>
                     <table class="table book-table mb0 table-striped js_tbl_<?=$model->id?>">
                         <?php
                         $i=0;
                         foreach($room as $r){
                             if($i!=0){$additional_book_row='js_book_row_additional hiddeniraak';}else{$additional_book_row='';}
                             $book=Html::a("Book",['book/create', 'room'=>$r['name'],
-                                'price'=>$r['price'], 'price_for_nights'=>$for, 'hotel_id'=>$model->id, 'other'=>'',
+                                'price'=>$r['price'], 'price_for_nights'=>$for, 'hotel_id'=>$model->id, 'other'=>'','adults'=>$get['adult'],
+                                'ex_id'=>$excel_id,'nationality'=>$get['nationality_id'],'children'=>$get['children'],'child_ages'=>$child_age,
                                 'date_from'=>$stay_start, 'date_to'=>$stay_end],['class'=>'btn btn-success btn-sm']);
                             ?>
                             <tr class="<?=$additional_book_row?>">

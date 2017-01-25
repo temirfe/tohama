@@ -298,14 +298,14 @@ class SiteController extends Controller
                 }
 
                 move_uploaded_file( $_FILES['excel']['tmp_name'], $target);
-                //$parsed_data=$this->parseExcel($newname,$data);
-                $parsed_data=$this->parseExcelTest($newname);
-                echo "<pre>";
+                $parsed_data=$this->parseExcel($newname,$data);
+                //$parsed_data=$this->parseExcelTest($newname);
+                /*echo "<pre>";
                 print_r($parsed_data);
-                echo "</pre>";
+                echo "</pre>";*/
                 $time_end = microtime(true);
                 $execution_seconds=$time_end - $time_start;
-                die();
+                //die();
                 return $this->render('excelresult',['data'=>$parsed_data,'time'=>$execution_seconds]);
             }
         }
@@ -349,7 +349,9 @@ class SiteController extends Controller
                     $sheets[$sheet_title]['hotel_id']=$hotel_ids[$sku_id];
                     $myWorksheetIndex = $workbook->getWorksheetIndex($sheet_title);
                     $arrows=$workbook->createRowIterator($myWorksheetIndex);
-                    $sheets[$sheet_title]['rows']=$this->getRows($arrows);
+                    $parsedRows=$this->getRows($arrows);
+                    $sheets[$sheet_title]['price_rows']=$parsedRows['price_rows'];
+                    $sheets[$sheet_title]['info_rows']=$parsedRows['info_rows'];
                 }
             }
             else {
@@ -364,12 +366,12 @@ class SiteController extends Controller
         $dir=Yii::getAlias('@webroot');
         $file=$dir.'/upload/'.$filename;
         $workbook = SpreadsheetParser::open($file);
-        $dao=Yii::$app->db;
+        //$dao=Yii::$app->db;
 
-        $worksheets=$workbook->getWorksheets();
+        //$worksheets=$workbook->getWorksheets();
 
         $sheets = [];
-        $myWorksheetIndex = $workbook->getWorksheetIndex("Habtoor Grand Resort & SPA");
+        $myWorksheetIndex = $workbook->getWorksheetIndex("St. Regis");
         $arrows=$workbook->createRowIterator($myWorksheetIndex);
         $sheets['rows']=$this->getRowsTest($arrows);
 
@@ -403,39 +405,77 @@ class SiteController extends Controller
                 if(isset($arrow[11]))$row11=$arrow[11]; else $row11='';
 
                 $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$row6,$row7,$row8,$row9,$row10,$row11];
-                $prev_empty=false;
             }
             else{
                 if(!in_array($arrow[0],$stop) && $rowIndex>5){
-                    //echo $rowIndex.")".$arrow[0].' '.$arrow[1].' <br />';
                     if($prev_index<$rowIndex-1){
                         $info[$i-1]['description']=implode("\n",$desc);
                         $desc=[];
                         $title=false;
                         if($arrow[0]){$title="<span>".$arrow[0]."</span>";}
-                        if($arrow[1]){$title.="<span>".$arrow[1]."</span>";}
-                        if($arrow[2]){$title.="<span>".$arrow[2]."</span>";}
-                        if($arrow[3]){$title.="<span>".$arrow[3]."</span>";}
-                        if($arrow[4]){$title.="<span>".$arrow[4]."</span>";}
+                        if(!empty($arrow[1])){$title.="<span class='col2_title'>".$arrow[1]."</span>";}
+                        if(!empty($arrow[2])){$title.="<span class='col3_title'>".$arrow[2]."</span>";}
+                        if(!empty($arrow[3])){
+                            if(is_object($arrow[3])){$dateObj=$arrow[3]; $string=$dateObj->format('Y-m-d');}
+                            else $string=$arrow[3]; //
+                            $title.="<span class='col4_title'>".$string."</span>";
+                        }
+                        if(!empty($arrow[4])){
+                            if(is_object($arrow[4])){$dateObj=$arrow[4]; $string=$dateObj->format('Y-m-d');}
+                            else $string=$arrow[4]; //
+                            $title.="<span class='col5_title'>".$string."</span>";
+                        }
                         if($title){ $info[$i]['title']=$arrow[0];}
                         $i++;
                     }
                     else{
-                        $description=false;
-                        if($arrow[0]){$description="<span>".$arrow[0]."</span>";}
-                        if($arrow[1]){$description.="<span>".$arrow[1]."</span>";}
-                        if($arrow[2]){$description.="<span>".$arrow[2]."</span>";}
-                        if($arrow[3]){$description.="<span>".$arrow[3]."</span>";}
-                        if($arrow[4]){$description.="<span>".$arrow[4]."</span>";}
-                        if($description)$desc[]=$description;
+                        if(!empty($arrow[1]) || !empty($arrow[2])){
+                            $description="<tr>";
+                            if(!empty($arrow[0])){$description="<td class='col1'>".$arrow[0]."</td>";}
+                            if(!empty($arrow[1])){
+                                if(is_object($arrow[1])){$dateObj=$arrow[1]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[1]; //
+                                $description.="<td class='col2'>".$string."</td>";
+                            }
+                            if(!empty($arrow[2])){
+                                if(is_object($arrow[2])){$dateObj=$arrow[2]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[2]; //
+                                $description.="<td class='col3'>".$string."</td>";
+                            }
+                            if(!empty($arrow[3])){
+                                if(is_object($arrow[3])){$dateObj=$arrow[3]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[3]; //
+                                $description.="<td class='col4'>".$string."</td>";
+                            }
+                            if(!empty($arrow[4])){
+                                if(is_object($arrow[4])){$dateObj=$arrow[4]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[4]; //
+                                $description.="<td class='col5'>".$string."</td>";
+                            }
+                            if($description!="<tr>")$desc[]=$description."</tr>";
+                        }
+                        else{
+                            if(!empty($arrow[0])){
+
+                                //echo $rowIndex.")".$arrow[0].' <br />';
+                                $desc[]="<span class='col1'>".$arrow[0]."</span>";
+                            }
+                        }
                     }
                 }
 
             }
             $prev_index=$rowIndex;
         }
-        return ['quality_rows'=>$quality_rows, 'info'=>$info];
+
+        $info[$i-1]['description']=implode("\n",$desc); //last description
+
+        //return ['price_rows'=>$quality_rows, 'info_rows'=>$info];
         //return $quality_rows;
+        echo "<pre>";
+        print_r($info);
+        echo "</pre>";
+        die();
         //return $info;
     }
 
@@ -443,6 +483,11 @@ class SiteController extends Controller
         $start=false;
         $room_type='';
         $quality_rows=[];
+        $info=[];
+        $desc=[];
+        $prev_index=0;
+        $i=1;
+        $stop=["The End - >>>>>>>","Go to Index","Go to Home Page","Category :- 5 *****"];
         foreach ($arrows as $rowIndex => $arrow) {
             if(!$start){if(trim(strtolower($arrow[0]))=='room type'){$start=true;}}
             if($start && !empty($arrow[1]) && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
@@ -462,32 +507,110 @@ class SiteController extends Controller
 
                 $quality_rows[]=[$room_type,$arrow[1],$arrow[2],$date_from,$date_to,$arrow[5],$row6,$row7,$row8,$row9,$row10,$row11];
             }
+            else{
+                if(!in_array($arrow[0],$stop) && $rowIndex>5){
+                    //echo $rowIndex.")".$arrow[0].' '.$arrow[1].' <br />';
+                    if($prev_index<$rowIndex-1){
+                        $info[$i-1]['description']=implode("\n",$desc);
+                        $desc=[];
+                        $title=false;
+                        if($arrow[0]){$title="<span class='col1_title'>".$arrow[0]."</span>";}
+                        if(!empty($arrow[1])){$title.="<span class='col2_title'>".$arrow[1]."</span>";}
+                        if(!empty($arrow[2])){$title.="<span class='col3_title'>".$arrow[2]."</span>";}
+                        if(!empty($arrow[3])){
+                            if(is_object($arrow[3])){$dateObj=$arrow[3]; $string=$dateObj->format('Y-m-d');}
+                            else $string=$arrow[3]; //
+                            $title.="<span class='col4_title'>".$string."</span>";
+                        }
+                        if(!empty($arrow[4])){
+                            if(is_object($arrow[4])){$dateObj=$arrow[4]; $string=$dateObj->format('Y-m-d');}
+                            else $string=$arrow[4]; //
+                            $title.="<span class='col5_title'>".$string."</span>";
+                        }
+                        if($title){ $info[$i]['title']=$title;}
+                        $i++;
+                    }
+                    else{
+                        if(!empty($arrow[1]) || !empty($arrow[2])){
+                            $description="<tr>";
+                            if(!empty($arrow[0])){$description="<td class='col1'>".$arrow[0]."</td>";}
+                            if(!empty($arrow[1])){
+                                if(is_object($arrow[1])){$dateObj=$arrow[1]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[1]; //
+                                $description.="<td class='col2'>".$string."</td>";
+                            }
+                            if(!empty($arrow[2])){
+                                if(is_object($arrow[2])){$dateObj=$arrow[2]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[2]; //
+                                $description.="<td class='col3'>".$string."</td>";
+                            }
+                            if(!empty($arrow[3])){
+                                if(is_object($arrow[3])){$dateObj=$arrow[3]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[3]; //
+                                $description.="<td class='col4'>".$string."</td>";
+                            }
+                            if(!empty($arrow[4])){
+                                if(is_object($arrow[4])){$dateObj=$arrow[4]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[4]; //
+                                $description.="<td class='col5'>".$string."</td>";
+                            }
+                            if($description!="<tr>")$desc[]=$description."</tr>";
+                        }
+                        else{
+                            if(!empty($arrow[0])){$desc[]="<span class='col1'>".$arrow[0]."</span>";}
+                        }
+                    }
+                }
+
+            }
+            $prev_index=$rowIndex;
         }
-        return $quality_rows;
+        $info[$i-1]['description']=implode("\n",$desc); //last description
+        return ['price_rows'=>$quality_rows, 'info_rows'=>$info];
     }
 
     protected function saveResult($result,$data){
-        $batch_row=[];
+        $batch_row_price=[];
+        $batch_row_info=[];
         $new_saved_sheets=[];
         foreach($result as $sheet_title=>$sheet_array){
-            if(!empty($sheet_array['rows'])){
+            if(!empty($sheet_array['price_rows'])){
                 $new_saved_sheets[]=[$sheet_title,$data['excel_id']];
-                foreach($sheet_array['rows'] as $sheet_row){
+                foreach($sheet_array['price_rows'] as $sheet_row){
                     if(strtolower($sheet_row[0])!='room type'){
                         $sheet_row[12]=$sheet_array['hotel_id'];
                         $sheet_row[13]=$data['country_id'];
                         $sheet_row[14]=$data['city_id'];
-                        $batch_row[]=$sheet_row;
+                        $sheet_row[15]=$data['excel_id'];
+                        $batch_row_price[]=$sheet_row;
+                    }
+                }
+            }
+            if(!empty($sheet_array['info_rows'])){
+                foreach($sheet_array['info_rows'] as $info_row){
+                    if(!empty($info_row['title'])){
+                        if(!isset($info_row['description'])){$info_row['description']='';}
+                        $info_row['hotel_id']=$sheet_array['hotel_id'];
+                        $info_row['excel_id']=$data['excel_id'];
+                        $batch_row_info[]=$info_row;
                     }
                 }
             }
         }
         $dao=Yii::$app->db;
         $dao->createCommand()->batchInsert('roomprice',
-            ['room','season','meal_plan','date_from','date_to','sgl_room','dbl_person','third_pax','adult_hb','child_bb','child_eb','child_hb','hotel_id', 'country_id','city_id'],
-            $batch_row
+            ['room','season','meal_plan','date_from','date_to','sgl_room','dbl_person','third_pax','adult_hb','child_bb',
+                'child_eb','child_hb','hotel_id', 'country_id','city_id','excel_id'],
+            $batch_row_price
+        )->execute();
+        $dao->createCommand()->batchInsert('sheetinfo',
+            ['title','description','hotel_id','excel_id'],
+            $batch_row_info
         )->execute();
         $dao->createCommand()->batchInsert('worksheet',['title','excel_id'], $new_saved_sheets)->execute();
+        /*echo "<pre>";
+        print_r($batch_row_info);
+        echo "</pre>";*/
     }
 
     protected function parseSingleSheet($objPHPExcel, $skus_rows){
@@ -554,5 +677,16 @@ class SiteController extends Controller
 
     }
 
+    public function actionLoadTerms(){
+        $hotel_id=Yii::$app->request->post('hotel_id');
+        $excel_id=Yii::$app->request->post('excel_id');
+        $info_rows=Yii::$app->db->createCommand("SELECT * FROM sheetinfo WHERE excel_id='{$excel_id}' AND hotel_id='{$hotel_id}'")->queryAll();
+        if(!empty($info_rows)){
+            foreach($info_rows as $ir){
+                echo $ir['title'];
+                echo "<table class=''>".$ir['description']."</table>";
+            }
+        }
+    }
 
 }

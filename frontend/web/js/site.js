@@ -189,3 +189,20 @@ $('.js_children').change(function(){
         container.append(input);
     }
 });
+
+//open terms
+$('.js_terms_link').click(function(){
+    var hotel_id=$(this).attr('data-hotel');
+    var excel_id=$(this).attr('data-excel');
+    var cont=$('.js_terms_here');
+    cont.html("<div class='loader'></div>");
+    $.ajax({
+            type: 'POST',
+            data: {hotel_id:hotel_id, excel_id:excel_id, _csrf: yii.getCsrfToken()},
+            url: '/site/load-terms',
+            //beforeSend: function () {},
+            success:function(data){
+                cont.html(data);
+            }
+        });
+});

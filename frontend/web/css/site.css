@@ -199,6 +199,7 @@ a.green-success:hover{color:#3f913f;}
 .orange{color:#ff8d41;}
 a.orange:hover{color:#ff6e0e;}
 .red{color:#ea7177;}
+.real_red{color:red;}
 a.red:hover{color:#e9465b;}
 .hiddeniraak{display: none;}
 .box{border:1px solid #e6e6e6;}
@@ -563,3 +564,18 @@ h1, .h1 {
 input.krajee-datepicker{ padding-left: 7px;
     padding-right: 5px;}
 .mr59{margin-right:59px;}
+.terms{font-size: 11px;}
+.terms span{ display: block;}
+.terms table{margin-bottom: 15px;}
+.terms td{ border: 1px dotted #ccc;
+    padding: 2px 10px;
+    width: auto;}
+.col1_title{color:#6d4603;}
+td.col1{}
+td.col2{}
+.col3{}
+.col4{}
+.col1_title{}
+.col2_title{}
+.col3_title{}
+.terms_modal{max-height:500px; overflow:auto;}

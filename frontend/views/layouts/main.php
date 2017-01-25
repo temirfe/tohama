@@ -8,6 +8,7 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use frontend\models\HotelSearch;
+use yii\bootstrap\Modal;
 
 AppAsset::register($this);
 $controller=Yii::$app->controller->id;
@@ -119,6 +120,14 @@ if($isGuest || $user_role=='user'){
     <!-- {/literal} END JIVOSITE CODE -->
 <?php
 }
+?>
+<?php
+$modal = Modal::begin([
+    'id' => 'terms-modal',
+    'header' => Html::tag('h4', Yii::t('app', 'Hotel Terms & Conditions'), ['class' => 'modal-title']),
+]);
+echo "<div class='js_terms_here terms terms_modal'></div>";
+$modal::end();
 ?>
 
 </body>
