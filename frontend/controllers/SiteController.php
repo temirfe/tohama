@@ -369,7 +369,7 @@ class SiteController extends Controller
         $worksheets=$workbook->getWorksheets();
 
         $sheets = [];
-        $myWorksheetIndex = $workbook->getWorksheetIndex("Grand Hyatt");
+        $myWorksheetIndex = $workbook->getWorksheetIndex("Habtoor Grand Resort & SPA");
         $arrows=$workbook->createRowIterator($myWorksheetIndex);
         $sheets['rows']=$this->getRowsTest($arrows);
 
@@ -380,8 +380,11 @@ class SiteController extends Controller
         $start=false;
         $room_type='';
         $quality_rows=[];
-        $prev_empty=false;
         $info=[];
+        $desc=[];
+        $prev_index=0;
+        $i=1;
+        $stop=["The End - >>>>>>>","Go to Index","Go to Home Page","Category :- 5 *****"];
         foreach ($arrows as $rowIndex => $arrow) {
             if(!$start){if(trim(strtolower($arrow[0]))=='room type'){$start=true;}}
             if($start && !empty($arrow[2]) && !empty($arrow[3]) && !empty($arrow[4]) && !empty($arrow[5])){
@@ -403,19 +406,35 @@ class SiteController extends Controller
                 $prev_empty=false;
             }
             else{
-                echo "row::".$arrow[0].' ';
-                if(!$arrow[0]){
-                    $prev_empty=true;
-                    echo $rowIndex.') empty row <br />';
+                if(!in_array($arrow[0],$stop) && $rowIndex>5){
+                    //echo $rowIndex.")".$arrow[0].' '.$arrow[1].' <br />';
+                    if($prev_index<$rowIndex-1){
+                        $info[$i-1]['description']=implode("\n",$desc);
+                        $desc=[];
+                        $title=false;
+                        if($arrow[0]){$title="<span>".$arrow[0]."</span>";}
+                        if($arrow[1]){$title.="<span>".$arrow[1]."</span>";}
+                        if($arrow[2]){$title.="<span>".$arrow[2]."</span>";}
+                        if($arrow[3]){$title.="<span>".$arrow[3]."</span>";}
+                        if($arrow[4]){$title.="<span>".$arrow[4]."</span>";}
+                        if($title){ $info[$i]['title']=$arrow[0];}
+                        $i++;
+                    }
+                    else{
+                        $description=false;
+                        if($arrow[0]){$description="<span>".$arrow[0]."</span>";}
+                        if($arrow[1]){$description.="<span>".$arrow[1]."</span>";}
+                        if($arrow[2]){$description.="<span>".$arrow[2]."</span>";}
+                        if($arrow[3]){$description.="<span>".$arrow[3]."</span>";}
+                        if($arrow[4]){$description.="<span>".$arrow[4]."</span>";}
+                        if($description)$desc[]=$description;
+                    }
                 }
-                elseif(!empty($arrow[0])){
-                    if($prev_empty){$info[]['title']=$arrow[0];}
-                    else{$info[]['description']=$arrow[0];}
-                    $prev_empty=false;
-                    echo $rowIndex.') not empty <br />';
-                }
+
             }
+            $prev_index=$rowIndex;
         }
+        return ['quality_rows'=>$quality_rows, 'info'=>$info];
         //return $quality_rows;
         //return $info;
     }
