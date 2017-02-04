@@ -8,6 +8,7 @@ use frontend\models\HotelSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * HotelController implements the CRUD actions for Hotel model.
@@ -28,6 +29,19 @@ class HotelController extends MyController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }/**
+     * Lists all Hotel models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+        $searchModel = new HotelSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionAdmin()
@@ -37,31 +51,6 @@ class HotelController extends MyController
 
         return $this->render('admin', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    public function actionList()
-    {
-        /*if(Yii::$app->language=='ru')
-        {
-            $content_lang='1';
-        }
-        else{
-            $content_lang='0';
-        }*/
-        $ctg=Yii::$app->request->get('category');
-        if($ctg){$query=Article::find()->where(['category_id'=>$ctg]);}
-        else{$query=Article::find();}
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
-        ]);
-
-        return $this->render('list', [
             'dataProvider' => $dataProvider,
         ]);
     }

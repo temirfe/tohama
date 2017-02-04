@@ -46,7 +46,7 @@ else if($controller=='site' && Yii::$app->controller->action->id=='upload-excel'
                 <div class="<?=$item_active?>"><span class='panel-icon glyphicon glyphicon-tag'></span><?=Html::a('Package Items', ['/item/index']); ?></div>
                 <div class="<?=$dest_active?>"><span class='panel-icon glyphicon glyphicon-globe'></span><?=Html::a('Destinations', ['/destination/index']); ?></div>
                 <div class="<?=$city_active?>"><span class='panel-icon glyphicon glyphicon-map-marker'></span><?=Html::a('Cities', ['/city/index']); ?></div>
-                <div class="<?=$hotel_active?>"><span class='panel-icon glyphicon glyphicon-home'></span><?=Html::a('Hotels', ['/hotel/index']); ?></div>
+                <div class="<?=$hotel_active?>"><span class='panel-icon glyphicon glyphicon-home'></span><?=Html::a('Hotels', ['/hotel/admin']); ?></div>
                 <div class="<?=$book_active?>"><span class='panel-icon glyphicon glyphicon-credit-card'></span><?=Html::a('Bookings', ['/book/index']); ?></div>
                 <div class="<?=$excel_active?>"><span class='panel-icon glyphicon glyphicon-file'></span><?=Html::a('Upload excel', ['/site/upload-excel']); ?></div>
                 <div class="<?=$price_active?>"><span class='panel-icon glyphicon glyphicon-barcode'></span><?=Html::a('Hotel prices', ['/roomprice/index']); ?></div>
