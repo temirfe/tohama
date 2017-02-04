@@ -10,18 +10,18 @@ use kartik\date\DatePicker;
 /* @var $cities */
 ?>
 
-<div class="hotel-search row pad10 index_hotel_search">
+<div class="hotel-search oh index_hotel_search js_hotels_wrap">
     <?php $form = ActiveForm::begin([
         'action' => ['/hotel/search'],
         'method' => 'get',
     ]); ?>
-    <div class="row">
+    <div class="">
         <div class="col-md-4"><?= $form->field($model, 'country_id')->dropDownList($countries,['prompt'=>'Select country..','id'=>'hotel-country_id']); ?></div>
         <div class="col-md-4"><?= $form->field($model, 'city_id')->dropDownList($cities,['prompt'=>'Select city..', 'id'=>'hotel-city_id']); ?></div>
         <div class="col-md-4"><?= $form->field($model, 'nationality_id')->dropDownList($nations,['prompt'=>'Select Nationality..']); ?></div>
     </div>
 
-    <div class="row">
+    <div class="">
         <div class="col-md-3">
             <?php
             echo $form->field($model, 'date_from')->widget(DatePicker::classname(), [
@@ -52,12 +52,12 @@ use kartik\date\DatePicker;
                 ]
             ]);
             ?>
-            <div class="js_nights_count nights_count font11 mb5 color9"><?=$night?>-night stay</div>
+            <div class="js_nights_count nights_count font11 mb5 color5"><?=$night?>-night stay</div>
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'stars')->dropDownList(['no preference','1 Star','2 Stars','3 Stars','4 Stars','5 Stars',8=>'Apartment',9=>'unrated']); ?>
         </div>
-        <div class="row pt25 col-md-3">
+        <div class="row pt7 col-md-3">
             <div class="col-md-6 pr0">
                 <?= $form->field($model, 'adult')->dropDownList([1=>'1',2=>'2',3=>'3',4=>'4',5=>'5',6=>'6',7=>'7',8=>'8',9=>'9',10=>'10'],['class'=>'ml5']); ?>
             </div>
@@ -65,8 +65,8 @@ use kartik\date\DatePicker;
                 <?= $form->field($model, 'children')->dropDownList(range(0,5),['class'=>'js_children children_sel']); ?>
             </div>
 
-            <div class="js_child_ages_label font12 gray5 mb2" data-date="<?=$model->date_to?>"></div>
-            <div class="js_child_ages mb15">
+            <div class="js_child_ages_label font12 gray5 mb2 pl15" data-date="<?=$model->date_to?>"></div>
+            <div class="js_child_ages pl15">
                 <?php
                 if(!empty($get['child_age'])){
                     foreach($get['child_age'] as $age){
@@ -78,7 +78,7 @@ use kartik\date\DatePicker;
         </div>
     </div>
 
-    <div class="row mt10">
+    <div class="mt10">
         <div class="col-sm-10"><?= $form->field($model, 'title')->textInput(['placeholder'=>'Hotel name (optional)'])->label(false) ?></div>
         <div class="col-sm-2">
             <div class="form-group">

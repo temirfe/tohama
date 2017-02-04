@@ -144,6 +144,7 @@ a.desc:after {
 .pb20{padding-bottom:20px;}
 .pb25{padding-bottom:25px;}
 .pt0, .form-horizontal .pt0{padding-top:0;}
+.pt7{padding-top:7px;}
 .pt10{padding-top:10px;}
 .pt15{padding-top:15px;}
 .pt20{padding-top:20px;}
@@ -522,33 +523,46 @@ h1, .h1 {
 .hotel-search .form-group {
     margin-bottom: 7px;
 }
-.children_sel{padding:2px;}
+.children_sel, #hotelsearch-adult{padding:2px;border:none;}
 .index_hotel_search{
-    background-color: rgba(0, 0, 0, 0.8);
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);}
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.65);margin-top: 45px;
+    width: 740px;padding-bottom:10px;}
 .index_hotel_search label,.index_hotel_search .has-success label {
-    color: #f1f1f1;
+    color: #555;
+}
+.index_hotel_search input,.index_hotel_search .has-success input,.index_hotel_search select,.index_hotel_search .has-success select {
+    background-color: #e1ecf4;
 }
 .search_container{
     margin-left: auto;
     margin-right: auto;
-    width: 910px;
+    width: 740px;
+    height:300px;
 }
 .search_tab{
     display: inline-block;
     font-size: 20px;
-    padding: 8px 25px 2px;
+    padding: 6px 18px 10px;
+    position: absolute;
+    background-color: #fff;
+    cursor: pointer;
 }
 .hotels_tab{
-    background-color: rgba(0, 0, 0, 0.8);
-    margin-left: -15px;
-    color: #f1f1f1;
+    color: #333;z-index: 101;min-width: 114px;
 }
+.hotel_icon{color:#336087;font-size: 16px;}
+.tab_border{height:5px; width:100%; position: absolute; bottom: 0;left:0;}
+.tab_border_hotel{background-color:#336087;}
+.tab_border_flights{background-color:#fff;}
+.fhwrapper{}
+.flights_wrap{}
 .flights_tab{
-    background-color: rgba(226, 226, 226, 0.8);
-    color: #333;
-    margin-left: -4px;
-    display: none;
+    width: 114px;
+    left: 114px;
+    height: 45px;
+    z-index: 101;
+    padding:6px 10px 10px 15px;
 }
 .slider_title{background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
@@ -579,3 +593,17 @@ td.col2{}
 .col2_title{}
 .col3_title{}
 .terms_modal{max-height:500px; overflow:auto;}
+.hotel_search_input_ml{margin-left:30px;}
+.plane_icon{
+    width: 21px;
+    height: 20px;
+    background-image: url("/images/plane_icon.png");
+    background-repeat: no-repeat;
+    background-size: 18px auto;
+    display: inline-block;
+    background-position: 2px 1px;
+    margin-bottom: -4px;
+}
+.white_tab{height: 45px;
+    width: 100%;}
+.search-tabs-box li{margin-left:114px !important;}

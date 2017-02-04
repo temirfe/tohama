@@ -206,3 +206,17 @@ $('.js_terms_link').click(function(){
             }
         });
 });
+
+//tab search
+$('.js_flights_tab').click(function(){
+    $(this).hide();
+    $('.js_hotels_tab').find('span').hide();
+    $('.js_hotels_wrap').hide();
+    $('.js_flights_wrap').show();
+});
+$('.js_hotels_tab').click(function(){
+    $(this).find('span').show();
+    $('.js_flights_tab').show();
+    $('.js_hotels_wrap').show();
+    $('.js_flights_wrap').hide();
+});

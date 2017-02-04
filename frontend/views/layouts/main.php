@@ -71,9 +71,28 @@ else {$banner=['id'=>'','image'=>''];}
                     <?=$banner_description?>
                 </div>
                 <div class="search_container">
-                    <span class="hotels_tab search_tab">Hotels</span>
-                    <span class="flights_tab search_tab">Flights</span>
-                    <?=$this->render('/hotel/_search', ['model' => new HotelSearch(), 'index'=>true]);?>
+                    <div class="abs fhwrapper">
+                        <span class="hotels_tab search_tab js_hotels_tab">
+                            <i class="glyphicon glyphicon-lamp hotel_icon"></i>
+                            Hotels
+                            <span class="tab_border tab_border_hotel"></span>
+                        </span>
+                        <span class="flights_tab search_tab js_flights_tab">
+                            <i class="plane_icon"></i>
+                            Flights
+                            <span class="tab_border tab_border_flights"></span>
+                        </span>
+                        <span class="white_tab search_tab ">
+                        </span>
+                        <?=$this->render('/hotel/_search', ['model' => new HotelSearch(), 'index'=>true]);?>
+                        <div class="flights_wrap js_flights_wrap hiddeniraak">
+                            <!-- If you want the widget to support IE8, please include the following snippet: -->
+                            <!--[if lt IE 9]><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.1.0/es5-shim.js"></script><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script><![endif]--><!--[if gte IE 9]><!--><script src="//code.jquery.com/jquery-2.1.1.min.js"></script><!--<![endif]-->
+                            <!-- IE8 snippet end -->
+
+                            <script type="text/javascript" src="http://flights.tohamatravel.com/scripts/widget/sswidget.load.v1.min.js?product=flights&type=medium&language=en-GB&origin=DXBA"></script>
+                        </div>
+                    </div>
                 </div>
             </div>
             <?php
