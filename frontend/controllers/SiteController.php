@@ -96,7 +96,8 @@ class SiteController extends Controller
         $dao=Yii::$app->db;
         //$cities=$dao->createCommand("SELECT id,title, image FROM city")->queryAll();
         $packages=$dao->createCommand("SELECT * FROM package ORDER BY id DESC")->queryAll();
-        return $this->render('index',['packages'=>$packages]);
+        $destinations=$dao->createCommand("SELECT * FROM destination ORDER BY id DESC")->queryAll();
+        return $this->render('index',['packages'=>$packages, 'destinations'=>$destinations]);
     }
 
     /**

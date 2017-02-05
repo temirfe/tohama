@@ -82,7 +82,7 @@ else if($controller=='site' && Yii::$app->controller->action->id=='upload-excel'
                     </div>
                 <?php
                 }
-                elseif(in_array($action,['index','admin','update']) && Yii::$app->controller->id!='site')
+                elseif(in_array($action,['index','admin','update','show']) && Yii::$app->controller->id!='site')
                 {
                     ?>
                     <div class="operations" style="padding: 4px 13px; background-color: #000;">

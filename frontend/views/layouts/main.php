@@ -45,6 +45,7 @@ else {$banner=['id'=>'','image'=>''];}
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/css/swiper.min.css">
     <link rel="shortcut icon" href="/images/favicon2.ico" type="image/x-icon">
     <link rel="icon" href="/images/favicon2.ico" type="image/x-icon">
     <style type="text/css">
@@ -130,7 +131,7 @@ else {$banner=['id'=>'','image'=>''];}
 <a href="#" class="scrollToTop"><span class="glyphicon glyphicon-arrow-up"></span></a>
 <?php $this->endBody() ?>
 <?php
-if($isGuest || $user_role=='user'){
+if(Yii::$app->request->serverName!='tohama.loc' && ($isGuest || $user_role=='user')){
     ?>
     <!-- BEGIN JIVOSITE CODE {literal} -->
     <script type='text/javascript'>
@@ -149,6 +150,18 @@ echo "<div class='js_terms_here terms terms_modal'></div>";
 $modal::end();
 ?>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/js/swiper.min.js"></script>
+<script type="text/javascript">
+    //swiper
+    var mySwiper = new Swiper ('.swiper-container', {
+        // Optional parameters
+        loop: true,
+        freeMode: true,
+        spaceBetween: 30,
+        slidesPerView: 3,
+        autoplay: 2000
+    });
+</script>
 </body>
 </html>
 <?php $this->endPage() ?>

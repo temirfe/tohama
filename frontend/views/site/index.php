@@ -1,6 +1,9 @@
 <?php
 
-/* @var $this yii\web\View */
+/* @var $this yii\web\View
+ * @var $destinations frontend\controllers\DestinationController
+ * @var $packages frontend\controllers\DestinationController
+ */
 use yii\helpers\Html;
 $this->title = 'Tohama Travel & Tourism';
 if(!isset($dao)) $dao=Yii::$app->db;
@@ -20,6 +23,32 @@ if(!isset($dao)) $dao=Yii::$app->db;
 <div class="site-index">
 
     <div class="body-content">
+
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <?php
+                foreach($destinations as $pack){
+                    ?>
+                    <div class="swiper-slide">
+                        <div class="my_slide_wrap">
+                            <?php
+                            $img=Html::img("/images/destination/".$pack['id']."/s_".$pack['image'],['class'=>'img-responsive']);
+                            echo Html::a($img,['destination/view','id'=>$pack['id']]);
+                            ?>
+
+                            <div class="my_slide_title pad15">
+                                <?=Html::a($pack['title']."<span class='false_link'></span>",['destination/view','id'=>$pack['id']],['class'=>'no_underline']);?>
+                            </div>
+
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+
+
         <h3>Special offers</h3>
         <div class="row">
             <?php
