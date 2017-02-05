@@ -530,10 +530,15 @@ class SiteController extends Controller
                         if($title){ $info[$i]['title']=$title;}
                         $i++;
                     }
+                    
                     else{
                         if(!empty($arrow[1]) || !empty($arrow[2])){
                             $description="<tr>";
-                            if(!empty($arrow[0])){$description="<td class='col1'>".$arrow[0]."</td>";}
+                            if(!empty($arrow[0])){
+                                if(is_object($arrow[0])){$dateObj=$arrow[0]; $string=$dateObj->format('Y-m-d');}
+                                else $string=$arrow[0]; //
+                                $description.="<td class='col2'>".$string."</td>";
+                            }
                             if(!empty($arrow[1])){
                                 if(is_object($arrow[1])){$dateObj=$arrow[1]; $string=$dateObj->format('Y-m-d');}
                                 else $string=$arrow[1]; //
