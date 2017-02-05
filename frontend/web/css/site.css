@@ -631,16 +631,22 @@ td.col2{}
     align-items: center;
 }
 .my_slide_wrap{
-    background-color: #000;
     display: inline-block;
     width: 300px;
     height: 200px;
+    position: relative;
+}
+.my_slide_wrap img{
+    height:167px !important;
 }
 .my_slide_title {
     width: 100%;
     padding: 9px;
     text-align: center;
     line-height: 14px;
+    background-color: #000;
+    position: absolute;
+    bottom: 0;
 }
 .my_slide_title a {
     font-weight: bold;
