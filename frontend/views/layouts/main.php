@@ -153,14 +153,14 @@ $modal::end();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.1/js/swiper.min.js"></script>
 <script type="text/javascript">
     //swiper
-  /*  var mySwiper = new Swiper ('.swiper-container', {
+    var mySwiper = new Swiper ('.swiper-container', {
         // Optional parameters
         loop: true,
         freeMode: true,
         spaceBetween: 30,
         slidesPerView: 3,
         autoplay: 2000
-    });*/
+    });
 </script>
 </body>
 </html>
