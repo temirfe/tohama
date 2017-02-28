@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions'=>['width'=>180]
             ],
             'title',
-            'text:ntext',
+            'description',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
