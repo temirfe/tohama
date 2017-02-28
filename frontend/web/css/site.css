@@ -638,6 +638,7 @@ td.col2{}
 }
 .my_slide_wrap img{
     height:167px !important;
+    width:300px !important;
 }
 .my_slide_title {
     width: 100%;

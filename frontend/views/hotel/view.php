@@ -24,7 +24,8 @@ include_once($webroot.'/photoswipe/_swipe.php');
             <span class="star_wrap">
                     <?php
                     if($model->stars){
-                        if($model->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
+                        if($model->stars==8){echo "<span class='label label-default font12 ml10'>Apartment</span>";}
+                        else if($model->stars==9){/*do nothing, it's unrated*/}
                         else{
                             for($i=0;$i<$model->stars; $i++){
                                 echo "<span class='glyphicon glyphicon-star star'></span>";
@@ -38,7 +39,7 @@ include_once($webroot.'/photoswipe/_swipe.php');
             <span class="glyphicon glyphicon-map-marker orange"></span>
             <?php
             $address[]=$model->address;
-            if (strpos($model->address, $model->neighborhood) !== false){$address[]=$model->neighborhood;}
+            if ($model->neighborhood && strpos($model->address, $model->neighborhood) !== false){$address[]=$model->neighborhood;}
             if (strpos($model->address, $model->city->title) == false){$address[]=$model->city->title;}
             if (strpos($model->address, $model->country->title) == false) {$address[]=$model->country->title;}
             echo implode(',',$address);

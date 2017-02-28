@@ -49,6 +49,9 @@ use kartik\date\DatePicker;
                     'autoclose'=>true,
                     'format' => 'dd M yyyy',
                     //'startDate'=>date('d/m/Y', strtotime('+1 days'))
+                ],
+                'pluginEvents' => [
+                    "changeDate" => "function(e) {endChange(e.date);}",
                 ]
             ]);
             ?>

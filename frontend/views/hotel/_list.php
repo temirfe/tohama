@@ -34,7 +34,8 @@ if($get['date_from'] && $get['date_to']){
         <?=Html::a($model->title,['/hotel/view','id'=>$model->id],['class'=>'hotel_list_title blue no_underline']); ?>
         <?php
         if($model->stars){
-            if($model->stars==6){echo "<span class='label label-default ml10'>Apartment</span>";}
+            if($model->stars==8){echo "<span class='label label-default font12 ml10'>Apartment</span>";}
+            else if($model->stars==9){/*do nothing, it's unrated*/}
             else{
                 echo "<span class='iblock'>";
                 for($i=0;$i<$model->stars; $i++){

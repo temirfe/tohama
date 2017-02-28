@@ -14,6 +14,8 @@ use Yii;
  * @property integer $market_id
  * @property string $room
  * @property string $room_note
+ * @property string $allocation
+ * @property string $occupancy
  * @property string $season
  * @property string $meal_plan
  * @property string $date_from
@@ -22,9 +24,13 @@ use Yii;
  * @property string $dbl_person
  * @property string $third_pax
  * @property string $adult_hb
+ * @property string $adult_fb
+ * @property string $adult_ai
  * @property string $child_bb
  * @property string $child_eb
  * @property string $child_hb
+ * @property string $child_fb
+ * @property string $child_ai
  * @property integer $promotional
  * @property string $booking_code
  * @property integer $excel_id
@@ -49,9 +55,10 @@ class Roomprice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['hotel_id', 'country_id', 'city_id', 'market_id', 'room', 'room_note', 'season', 'meal_plan', 'date_from', 'date_to', 'sgl_room', 'dbl_person', 'third_pax', 'adult_hb', 'child_bb', 'child_eb', 'child_hb', 'booking_code'], 'required'],
+            [['hotel_id', 'country_id', 'city_id', 'market_id', 'room', 'room_note', 'season', 'meal_plan', 'date_from', 'date_to', 'sgl_room', 
+                'dbl_person', 'third_pax', 'adult_hb', 'child_bb', 'child_eb', 'child_hb', 'booking_code'], 'required'],
             [['hotel_id', 'country_id', 'city_id', 'market_id', 'sgl_room', 'promotional','excel_id'], 'integer'],
-            [['date_from', 'date_to'], 'safe'],
+            [['date_from', 'date_to','child_fb','child_ai','occupancy','allocation','adult_fb','adult_ai'], 'safe'],
             [['room', 'room_note'], 'string', 'max' => 50],
             [['season', 'meal_plan', 'dbl_person', 'third_pax', 'adult_hb', 'child_bb', 'child_eb', 'child_hb'], 'string', 'max' => 20],
             [['booking_code'], 'string', 'max' => 30],

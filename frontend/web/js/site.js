@@ -162,6 +162,35 @@ function startChange(data){
     $('.js_nights_count').text(diff+'-night stay');
 }
 
+function endChange(data){
+    var date_from_input=$('#hotelsearch-date_from');
+    var end_millis=data.getTime();
+    var start_string=date_from_input.val();
+    var start_date=new Date(start_string);
+    var start_millis=start_date.getTime();
+    var diff =  Math.floor((end_millis - start_millis) / 86400000);
+    if(end_millis<start_millis){
+        var monthNames = [
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sep", "Oct",
+            "Nov", "Dec"
+        ];
+
+        diff=7;
+
+        var date = new Date();
+        var res = date.setDate(data.getDate() + 7);
+        var zb=new Date(res);
+        var day = zb.getDate();
+        var monthIndex = zb.getMonth();
+        var year = zb.getFullYear();
+        date_from_input.kvDatepicker({format: 'dd M yyyy'});
+        date_from_input.kvDatepicker("update", new Date(day + ' ' + monthNames[monthIndex] + ' ' + year));
+    }
+    $('.js_nights_count').text(diff+'-night stay');
+}
+
 $('.js_show_additional_book_rows').click(function(e){
     e.preventDefault();
     var id=$(this).attr('data-id');
