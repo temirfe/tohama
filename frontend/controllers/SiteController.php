@@ -774,7 +774,6 @@ class SiteController extends Controller
                     $start=true;
                 }
             }
-
             if($start && !empty($arrow[5]) && !empty($arrow[6])){
                 if($arrow[4]){$room_type=$arrow[4];}
                 if($arrow[3]){$occupancy=$arrow[3];}
@@ -784,16 +783,46 @@ class SiteController extends Controller
                 if(is_object($arrow[1])){$toDateObj=$arrow[1]; $date_to=$toDateObj->format('Y-m-d');}
                 else $date_to=$arrow[1];//it's column label: "To";
 
-                if(isset($arrow[2]))$row2=$arrow[2]; else $row2='';
-                if(isset($arrow[7]))$row7=$arrow[7]; else $row7='';
-                if(isset($arrow[8]))$row8=$arrow[8]; else $row8='';
-                if(isset($arrow[9]))$row9=$arrow[9]; else $row9='';
-                if(isset($arrow[10]))$row10=$arrow[10]; else $row10='';
-                if(isset($arrow[11]))$row11=$arrow[11]; else $row11='';
-                if(isset($arrow[12]))$row12=$arrow[12]; else $row12='';
-                if(isset($arrow[13]))$row13=$arrow[13]; else $row13='';
-                if(isset($arrow[14]))$row14=$arrow[14]; else $row14='';
-                if(isset($arrow[15]))$row15=$arrow[15]; else $row15='';
+                if(isset($arrow[2])){
+                    if(is_object($arrow[2])){$fromDateObj=$arrow[2]; $row2=$fromDateObj->format('Y-m-d');}
+                    else $row2=$arrow[2];
+                }else $row2='';
+                if(isset($arrow[7])){
+                    if(is_object($arrow[7])){$fromDateObj=$arrow[7]; $row7=$fromDateObj->format('Y-m-d');}
+                    else $row7=$arrow[7];
+                } else $row7='';
+                if(isset($arrow[8])){
+                    if(is_object($arrow[8])){$fromDateObj=$arrow[8]; $row8=$fromDateObj->format('Y-m-d');}
+                    else $row8=$arrow[8];
+                } else $row8='';
+                if(isset($arrow[9])){
+                    if(is_object($arrow[9])){$fromDateObj=$arrow[9]; $row9=$fromDateObj->format('Y-m-d');}
+                    else $row9=$arrow[9];
+                } else $row9='';
+                if(isset($arrow[10])){
+                    if(is_object($arrow[10])){$fromDateObj=$arrow[10]; $row10=$fromDateObj->format('Y-m-d');}
+                    else $row10=$arrow[10];
+                } else $row10='';
+                if(isset($arrow[11])){
+                    if(is_object($arrow[11])){$fromDateObj=$arrow[11]; $row11=$fromDateObj->format('Y-m-d');}
+                    else $row11=$arrow[11];
+                } else $row11='';
+                if(isset($arrow[12])){
+                    if(is_object($arrow[12])){$fromDateObj=$arrow[12]; $row12=$fromDateObj->format('Y-m-d');}
+                    else $row12=$arrow[12];
+                } else $row12='';
+                if(isset($arrow[13])){
+                    if(is_object($arrow[13])){$fromDateObj=$arrow[13]; $row13=$fromDateObj->format('Y-m-d');}
+                    else $row13=$arrow[13];
+                } else $row13='';
+                if(isset($arrow[14])){
+                    if(is_object($arrow[14])){$fromDateObj=$arrow[14]; $row14=$fromDateObj->format('Y-m-d');}
+                    else $row14=$arrow[14];
+                } else $row14='';
+                if(isset($arrow[15])){
+                    if(is_object($arrow[15])){$fromDateObj=$arrow[15]; $row15=$fromDateObj->format('Y-m-d');}
+                    else $row15=$arrow[15];
+                } else $row15='';
 
                 $quality_rows[]=[$date_from,$date_to,$row2,$occupancy,$room_type,$arrow[5],$arrow[6],$row7,$row8,$row9,$row10,$row11,$row12,$row13,$row14,$row15];
             }
@@ -947,16 +976,24 @@ class SiteController extends Controller
         }
         $dao=Yii::$app->db;
         //third_pax is instead of adult_eb
-        $dao->createCommand()->batchInsert('roomprice',
-            ['date_from','date_to','allocation','occupancy','room','sgl_room','dbl_person','third_pax','adult_hb','adult_fb','adult_ai','child_bb',
-                'child_eb','child_hb','child_fb','child_ai','hotel_id', 'country_id','city_id','excel_id'],
-            $batch_row_price
-        )->execute();
+        $chunked_rows=array_chunk($batch_row_price,1000);
+        foreach($chunked_rows as $chrow){
+            $dao->close();
+            $dao->open();
+            $dao->createCommand()->batchInsert('roomprice',
+                ['date_from','date_to','allocation','occupancy','room','sgl_room','dbl_person','third_pax','adult_hb','adult_fb','adult_ai','child_bb',
+                    'child_eb','child_hb','child_fb','child_ai','hotel_id', 'country_id','city_id','excel_id'],
+                $chrow
+            )->execute();
+        }
+        
+
         $dao->createCommand()->batchInsert('sheetinfo',
             ['title','description','hotel_id','excel_id'],
             $batch_row_info
         )->execute();
         $dao->createCommand()->batchInsert('worksheet',['title','excel_id'], $new_saved_sheets)->execute();
+
         /*echo "<pre>";
         print_r($batch_row_info);
         echo "</pre>";*/
